@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?scenebuilder-background-color 0x008effff?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Controller.startController">
+  <children>
+    <Button fx:id="loginButton" cancelButton="false" contentDisplay="CENTER" defaultButton="true" layoutX="725.0" layoutY="263.0" mnemonicParsing="false" opacity="1.0" prefHeight="28.0" prefWidth="92.0" text="Login" underline="false">
+      <font>
+        <Font size="14.0" fx:id="x1" />
+      </font>
+    </Button>
+    <PasswordField fx:id="passwordField" layoutX="725" layoutY="206.0" prefHeight="23.000099999997474" prefWidth="118.0" promptText="Password" />
+    <TextField fx:id="usernameField" layoutX="725" layoutY="166.0" prefHeight="23.0" prefWidth="118.0" promptText="Username" />
+    <Label layoutX="600" layoutY="98.0" prefHeight="35.000099999997474" prefWidth="405.0" text="Tesma collaboration development tool">
+      <font>
+        <Font size="22.0" />
+      </font>
+    </Label>
+    <Button id="loginButton" fx:id="newUserButton" cancelButton="false" contentDisplay="CENTER" defaultButton="true" font="$x1" layoutX="725" layoutY="313.0" mnemonicParsing="false" opacity="1.0" prefHeight="28.0" prefWidth="92.0" text="New User" underline="false" />
+  </children>
+</AnchorPane>
