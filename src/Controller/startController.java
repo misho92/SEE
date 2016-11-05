@@ -52,7 +52,7 @@ public class startController implements Initializable {
             			welcomeController welcome = (welcomeController)loader.getController();
             			welcome.getConnection();
             			welcome.getSelect();
-            			stage.setTitle("Welcome in");
+            			stage.setTitle("Dashboard");
             			stage.setScene(new Scene(root,1500,800));
             			stage.show();
             			Stage closingStage = (Stage) loginButton.getScene().getWindow();
