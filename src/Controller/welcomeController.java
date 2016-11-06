@@ -13,8 +13,10 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -165,6 +167,48 @@ public class welcomeController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("Query failed to execute");
+		}
+		finally{
+		      //finally block used to close resources
+		      try{
+		         if(st!=null)
+		            st.close();
+		      }catch(SQLException se2){}
+		      try{
+		         if(conn!=null)
+		            conn.close();
+		      }catch(SQLException se){
+		         se.printStackTrace();
+		      }
+		}
+		return false;
+	}
+	
+	public boolean register(String username, String pass){
+		try {
+
+			st = conn.prepareStatement("INSERT INTO see.user VALUES(?,?)");
+			st.setString(1, username);
+			st.setString(2, pass);
+			int rows = st.executeUpdate();
+			
+			if (rows != 0) {
+			    return true;
+			}
+			
+			System.out.println("Query executed");
+			rs.close();
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Query failed to execute");
+			Alert alert = new Alert(AlertType.ERROR);
+        	alert.setTitle("Error Dialog");
+        	alert.setHeaderText("Something went wrong");
+        	alert.setContentText("Registration failed");
+        	alert.showAndWait();
 		}
 		finally{
 		      //finally block used to close resources
