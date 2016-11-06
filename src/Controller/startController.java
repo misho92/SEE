@@ -44,14 +44,14 @@ public class startController implements Initializable {
         //The button event for the login button
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)   {
-            	if(usernameField.getText().equals("ok") && passwordField.getText().equals("ok")){
+            	welcomeController welcome = new welcomeController();
+            	welcome.getConnection();
+            	if(welcome.login(usernameField.getText(),passwordField.getText())){
             		try{
             			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
+            			//welcomeController welcome = (welcomeController)loader.getController();
             			Parent root = (Parent) loader.load();
             			final Stage stage = new Stage();
-            			welcomeController welcome = (welcomeController)loader.getController();
-            			welcome.getConnection();
-            			welcome.getSelect();
             			stage.setTitle("Dashboard");
             			stage.setScene(new Scene(root,1500,800));
             			stage.show();

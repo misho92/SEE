@@ -47,14 +47,14 @@ public class welcomeController {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost/test";
+	static final String DB_URL = "jdbc:mysql://localhost/see";
 
 	// Database credentials
 	static final String USER = "root";
 	static final String PASS = "root";
 
 	Connection conn = null;
-	Statement stmt = null;
+	PreparedStatement st = null;
 	ResultSet rs = null;
 	
 	
@@ -137,29 +137,29 @@ public class welcomeController {
 		return conn;
 	}
 
-	public void getSelect() {
+	public boolean login(String username, String pass) {
 		try {
-			stmt = conn.createStatement();
+			//avoid sql injection
+			st = conn.prepareStatement("SELECT * FROM SEE.user WHERE username = ? AND pass = ?");
+			st.setString(1, username);
+			st.setString(2, pass);
 
-			String sql;
-			sql = "SELECT * FROM test.persons";
-
-			rs = stmt.executeQuery(sql);
+			rs = st.executeQuery();
 			
-			//Extract data from result set
-
+			if (rs.next()) {
+				name = "Welcome " + rs.getString("username");
+			    return true;
+			}
+			
+			/*Extract data from result set
 			while (rs.next()) {
 				// Retrieve by column name
-				int id = rs.getInt("PersonID");
-				String last = rs.getString("LastName");
-				name = "Welcome " + rs.getString("FirstName");
-				String address = rs.getString("Address");
-				String city = rs.getString("City");
-			}
-			initialize();
+				name = "Welcome " + rs.getString("username");
+			}*/
+			
 			System.out.println("Query executed");
 			rs.close();
-			stmt.close();
+			st.close();
 			conn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -169,8 +169,8 @@ public class welcomeController {
 		finally{
 		      //finally block used to close resources
 		      try{
-		         if(stmt!=null)
-		            stmt.close();
+		         if(st!=null)
+		            st.close();
 		      }catch(SQLException se2){}
 		      try{
 		         if(conn!=null)
@@ -179,5 +179,6 @@ public class welcomeController {
 		         se.printStackTrace();
 		      }
 		}
+		return false;
 	}
 }
