@@ -1,8 +1,12 @@
 package Controller;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -44,30 +48,43 @@ public class startController implements Initializable {
         //The button event for the login button
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)   {
-            	welcomeController welcome = new welcomeController();
-            	welcome.getConnection();
-            	if(welcome.login(usernameField.getText(),passwordField.getText())){
-            		try{
-            			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
-            			//welcomeController welcome = (welcomeController)loader.getController();
-            			Parent root = (Parent) loader.load();
-            			final Stage stage = new Stage();
-            			stage.setTitle("Dashboard");
-            			stage.setScene(new Scene(root,1500,800));
-            			stage.show();
-            			Stage closingStage = (Stage) loginButton.getScene().getWindow();
-            			closingStage.close();
-            		}catch(final IOException ex){
-            			ex.getStackTrace();
-            		}
-            	}
-            	else{
-            		Alert alert = new Alert(AlertType.ERROR);
-                	alert.setTitle("Error Dialog");
-                	alert.setHeaderText("Incorrect login");
-                	alert.setContentText("Incorrect login");
-                	alert.showAndWait();	
-            	}
+            	//welcomeController welcome = new welcomeController();
+            	//welcome.getConnection();
+            	try {
+        			URL url = new URL("http://messir.uni.lu:8085/jira/rest/api/2/search?jql=project=test");
+        			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        			conn.setRequestMethod("GET");
+        			conn.setRequestProperty("Accept", "application/json");
+        			String auth = usernameField.getText() + ":" + passwordField.getText();
+        			byte[] credentials = auth.getBytes(StandardCharsets.UTF_8);
+        			String encoded = Base64.getEncoder().encodeToString(credentials);
+        			conn.setRequestProperty("Authorization", "Basic " + encoded);
+        			if(conn.getResponseCode() == 401){
+        				Alert alert = new Alert(AlertType.ERROR);
+                    	alert.setTitle("Error Dialog");
+                    	alert.setHeaderText("Incorrect credentials");
+                    	alert.setContentText("Incorrect credentials");
+                    	alert.showAndWait();
+        			}else{
+        				try{
+                			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
+                			//welcomeController welcome = (welcomeController)loader.getController();
+                			Parent root = (Parent) loader.load();
+                			final Stage stage = new Stage();
+                			stage.setTitle("Dashboard");
+                			stage.setScene(new Scene(root,1500,800));
+                			stage.show();
+                			Stage closingStage = (Stage) loginButton.getScene().getWindow();
+                			closingStage.close();
+                		}catch(final IOException ex){
+                			ex.getStackTrace();
+                		}
+        			}
+        		}catch (MalformedURLException ex) {
+        				ex.printStackTrace();
+        			 } catch (IOException ex) {
+        				ex.printStackTrace();
+        			 }
             }
         });
         

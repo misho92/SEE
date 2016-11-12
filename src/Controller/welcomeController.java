@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -95,8 +97,19 @@ public class welcomeController {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
+			//String auth = "Mihail" + ":" + "Misho92g!";
+			//byte[] credentials = auth.getBytes(StandardCharsets.UTF_8);
+			//String encoded = Base64.getEncoder().encodeToString(credentials);
+			//conn.setRequestProperty("Authorization", "Basic " + encoded);
 			if (conn.getResponseCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			}
+			else if(conn.getResponseCode() == 401){
+				Alert alert = new Alert(AlertType.ERROR);
+            	alert.setTitle("Error Dialog");
+            	alert.setHeaderText("Incorrect credentials");
+            	alert.setContentText("Incorrect credentials");
+            	alert.showAndWait();
 			}
 			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 			String response = br.readLine();
