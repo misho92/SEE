@@ -23,7 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 
-public class startController implements Initializable {
+public class StartController implements Initializable {
 
     @FXML
     private ResourceBundle resources;
@@ -48,8 +48,6 @@ public class startController implements Initializable {
         //The button event for the login button
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)   {
-            	//welcomeController welcome = new welcomeController();
-            	//welcome.getConnection();
             	try {
         			URL url = new URL("http://messir.uni.lu:8085/jira/rest/api/2/search?jql=project=test");
         			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -68,8 +66,9 @@ public class startController implements Initializable {
         			}else{
         				try{
                 			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
-                			//welcomeController welcome = (welcomeController)loader.getController();
                 			Parent root = (Parent) loader.load();
+                			WelcomeController controller = loader.<WelcomeController>getController();
+                			controller.setCredentials(usernameField.getText(),passwordField.getText());
                 			final Stage stage = new Stage();
                 			stage.setTitle("Dashboard");
                 			stage.setScene(new Scene(root,1500,800));
@@ -90,7 +89,7 @@ public class startController implements Initializable {
         
         newUserButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)   {
-            	welcomeController welcome = new welcomeController();
+            	WelcomeController welcome = new WelcomeController();
             	welcome.getConnection();
             	if(!usernameField.getText().equals("") && !passwordField.getText().equals("") && 
             			welcome.register(usernameField.getText(),passwordField.getText())){
