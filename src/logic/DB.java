@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -131,4 +132,44 @@ public class DB {
 			return false;
 		}
 
+		public ArrayList<Task> getTasksForIssue(String issue){
+			ArrayList<Task> tasks = new ArrayList<Task>();
+			getConnection();
+			try {
+				//avoid sql injection
+				st = conn.prepareStatement("SELECT * FROM TASK WHERE issueName = ?");
+				st.setString(1, issue);
+				rs = st.executeQuery();
+
+				while (rs.next()) {
+					Task t = new Task(rs.getString("title"), new User(rs.getString("assignee")), 
+						new Status(rs.getString("status")), rs.getDate("startDate"), rs.getDate("dueDate"), 
+						rs.getString("description"), rs.getInt("priority"));
+					tasks.add(t);
+				}
+				System.out.println("Query executed");
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+			}
+			finally{
+			      //finally block used to close resources
+			      try{
+			         if(st!=null)
+			            st.close();
+			      }catch(SQLException se2){}
+			      try{
+			         if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){
+			         se.printStackTrace();
+			      }
+			}
+			return tasks;
+		}
+		
 }

@@ -14,10 +14,18 @@
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Controller.WelcomeController">
   <children>
     <Label fx:id="welcome" layoutX="700" layoutY="100" prefHeight="35.000099999997474" prefWidth="205.0"></Label>
-    <ListView fx:id="listIssues"/>
-    <Text fx:id="details" layoutX="300" layoutY="50" text="Details"/>
-    <Text fx:id="type" layoutX="250" layoutY="75" text="Type:"/>
-    <Text fx:id="priority" layoutX="250" layoutY="100" text="Priority:"/>
-    <Text fx:id="status" layoutX="400" layoutY="75" text="Status: "/>
+    <ListView fx:id="listIssues" />
+    <ListView fx:id="listTasks" layoutX="250"/>
+    <Text fx:id="details" layoutX="550" layoutY="50" text="Issue details"/>
+    <Text fx:id="type" layoutX="500" layoutY="75" text="Type:"/>
+    <Text fx:id="priority" layoutX="500" layoutY="100" text="Priority:"/>
+    <Text fx:id="status" layoutX="650" layoutY="75" text="Status: "/>
+    <Text fx:id="devDetails" layoutX="550" layoutY="125" text="Development task details"/>
+    <Text fx:id="title" layoutX="500" layoutY="150" text="Title: "/>
+    <Text fx:id="assignee" layoutX="500" layoutY="175" text="Assignee: "/>
+    <Text fx:id="tStatus" layoutX="500" layoutY="200" text="Status: "/>
+    <Text fx:id="tPriority" layoutX="500" layoutY="225" text="Priority: "/>
+    <Text fx:id="start" layoutX="500" layoutY="250" text="Start Date: "/>
+    <Text fx:id="end" layoutX="500" layoutY="275" text="Due Date"/>
   </children>
 </AnchorPane>
