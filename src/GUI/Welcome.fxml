@@ -14,7 +14,7 @@
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Controller.WelcomeController">
   <children>
     <Label fx:id="welcome" layoutX="700" layoutY="100" prefHeight="35.000099999997474" prefWidth="205.0"></Label>
-    <ListView fx:id="listView"/>
+    <ListView fx:id="listIssues"/>
     <Text fx:id="details" layoutX="300" layoutY="50" text="Details"/>
     <Text fx:id="type" layoutX="250" layoutY="75" text="Type:"/>
     <Text fx:id="priority" layoutX="250" layoutY="100" text="Priority:"/>

@@ -49,7 +49,7 @@ public class StartController implements Initializable {
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)   {
             	try {
-        			URL url = new URL("http://messir.uni.lu:8085/jira/rest/api/2/search?jql=project=test");
+        			URL url = new URL("http://messir.uni.lu:8085/jira/rest/api/2/search?jql=project=seemt");
         			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         			conn.setRequestMethod("GET");
         			conn.setRequestProperty("Accept", "application/json");
@@ -68,7 +68,7 @@ public class StartController implements Initializable {
                 			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
                 			Parent root = (Parent) loader.load();
                 			WelcomeController controller = loader.<WelcomeController>getController();
-                			controller.setCredentials(usernameField.getText(),passwordField.getText());
+                			//controller.setCredentials(usernameField.getText(),passwordField.getText());
                 			final Stage stage = new Stage();
                 			stage.setTitle("Dashboard");
                 			stage.setScene(new Scene(root,1500,800));
@@ -90,9 +90,9 @@ public class StartController implements Initializable {
         newUserButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)   {
             	WelcomeController welcome = new WelcomeController();
-            	welcome.getConnection();
-            	if(!usernameField.getText().equals("") && !passwordField.getText().equals("") && 
-            			welcome.register(usernameField.getText(),passwordField.getText())){
+            	//welcome.getConnection();
+            	if(!usernameField.getText().equals("") && !passwordField.getText().equals("") ){
+            			//&& welcome.register(usernameField.getText(),passwordField.getText())){
             		try{
             			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
             			Parent root = (Parent) loader.load();
