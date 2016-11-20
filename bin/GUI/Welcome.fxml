@@ -16,16 +16,26 @@
     <Label fx:id="welcome" layoutX="700" layoutY="100" prefHeight="35.000099999997474" prefWidth="205.0"></Label>
     <ListView fx:id="listIssues" />
     <ListView fx:id="listTasks" layoutX="250"/>
-    <Text fx:id="details" layoutX="550" layoutY="50" text="Issue details"/>
-    <Text fx:id="type" layoutX="500" layoutY="75" text="Type:"/>
-    <Text fx:id="priority" layoutX="500" layoutY="100" text="Priority:"/>
-    <Text fx:id="status" layoutX="650" layoutY="75" text="Status: "/>
-    <Text fx:id="devDetails" layoutX="550" layoutY="125" text="Development task details"/>
-    <Text fx:id="title" layoutX="500" layoutY="150" text="Title: "/>
-    <Text fx:id="assignee" layoutX="500" layoutY="175" text="Assignee: "/>
-    <Text fx:id="tStatus" layoutX="500" layoutY="200" text="Status: "/>
-    <Text fx:id="tPriority" layoutX="500" layoutY="225" text="Priority: "/>
-    <Text fx:id="start" layoutX="500" layoutY="250" text="Start Date: "/>
-    <Text fx:id="end" layoutX="500" layoutY="275" text="Due Date"/>
+    <ListView fx:id="listSubTasks" layoutX="500"/>
+    <Text fx:id="details" layoutX="800" layoutY="50" text="Issue details"/>
+    <Text fx:id="type" layoutX="750" layoutY="75" text="Type:"/>
+    <Text fx:id="priority" layoutX="750" layoutY="100" text="Priority:"/>
+    <Text fx:id="status" layoutX="900" layoutY="75" text="Status: "/>
+    <Text fx:id="devDetails" layoutX="800" layoutY="125" text="Development task details"/>
+    <Text fx:id="title" layoutX="750" layoutY="150" text="Title: "/>
+    <Text fx:id="assignee" layoutX="750" layoutY="175" text="Assignee: "/>
+    <Text fx:id="tStatus" layoutX="750" layoutY="200" text="Status: "/>
+    <Text fx:id="tPriority" layoutX="750" layoutY="225" text="Priority: "/>
+    <Text fx:id="start" layoutX="750" layoutY="250" text="Start Date: "/>
+    <Text fx:id="end" layoutX="750" layoutY="275" text="Due Date"/>
+    <TextArea fx:id="description" text="Text1" layoutX="900" layoutY="150"/>
+    <Text fx:id="subDevDetails" layoutX="800" layoutY="450" text="Development subtask details"/>
+    <Text fx:id="sTitle" layoutX="750" layoutY="475" text="Title: "/>
+    <Text fx:id="sAssignee" layoutX="750" layoutY="500" text="Assignee: "/>
+    <Text fx:id="sStatus" layoutX="750" layoutY="525" text="Status: "/>
+    <Text fx:id="sPriority" layoutX="750" layoutY="550" text="Priority: "/>
+    <Text fx:id="sStart" layoutX="750" layoutY="575" text="Start Date: "/>
+    <Text fx:id="sEnd" layoutX="750" layoutY="600" text="Due Date"/>
+    <TextArea fx:id="sDescription" layoutX="900" layoutY="475"/>
   </children>
 </AnchorPane>

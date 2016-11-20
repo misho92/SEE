@@ -132,20 +132,23 @@ public class DB {
 			return false;
 		}
 
+		//get all tasks and subtasks for a particular issue
 		public ArrayList<Task> getTasksForIssue(String issue){
 			ArrayList<Task> tasks = new ArrayList<Task>();
 			getConnection();
 			try {
 				//avoid sql injection
-				st = conn.prepareStatement("SELECT * FROM TASK WHERE issueName = ?");
+				st = conn.prepareStatement("SELECT * FROM TASK WHERE issueName = ? AND mainTask IS NULL");
 				st.setString(1, issue);
 				rs = st.executeQuery();
 
 				while (rs.next()) {
+					//get all subtasks of a task
 					Task t = new Task(rs.getString("title"), new User(rs.getString("assignee")), 
 						new Status(rs.getString("status")), rs.getDate("startDate"), rs.getDate("dueDate"), 
 						rs.getString("description"), rs.getInt("priority"));
-					tasks.add(t);
+						getSubTasks(t);
+						tasks.add(t);
 				}
 				System.out.println("Query executed");
 				rs.close();
@@ -172,4 +175,30 @@ public class DB {
 			return tasks;
 		}
 		
+		public Task getSubTasks(Task task){
+			ArrayList<Task> tasks = new ArrayList<Task>();
+			getConnection();
+			try {
+				//avoid sql injection
+				ResultSet res = null;
+				st = conn.prepareStatement("SELECT * FROM TASK WHERE mainTask = ?");
+				st.setString(1, task.getTitle());
+				res = st.executeQuery();
+
+				while (res.next()) {
+					//get all subtasks of a task
+					Task t = new Task(res.getString("title"), new User(res.getString("assignee")), 
+						new Status(res.getString("status")), res.getDate("startDate"), res.getDate("dueDate"), 
+						res.getString("description"), rs.getInt("priority"));
+						tasks.add(t);
+				}
+				task.setSubTasks(tasks);
+				System.out.println("Query executed");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+			}
+			return task;
+		}
 }
