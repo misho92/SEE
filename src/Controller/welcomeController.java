@@ -182,7 +182,7 @@ public class WelcomeController {
             	}*/
             	listTasks.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 		            public ListCell<String> call(ListView<String> param) {
-		                return new XCell(listTasks);
+		                return new XCell(listTasks, listSubTasks, "task");
 		            }
 		        });
             }
@@ -206,7 +206,7 @@ public class WelcomeController {
         				listSubTasks.getItems().add(tasks.get(i).getSubTasks().get(j).getTitle());
         				listSubTasks.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
         		            public ListCell<String> call(ListView<String> param) {
-        		                return new XCell(listSubTasks);
+        		                return new XCell(listTasks,listSubTasks,"subtask");
         		            }
         		        });
                     }
@@ -242,55 +242,6 @@ public class WelcomeController {
 	private void openSubTask(){
 		System.out.println("openSubTask clicked");
 	}
-
-	static class XCell extends ListCell<String> {
-        HBox hbox = new HBox();
-        Label label = new Label("(empty)");
-        Pane pane = new Pane();
-        Button button = new Button("X");
-        String lastItem;
-        ListView<String> listView;
-        boolean success = false;
-
-        public XCell(ListView<String> listView) {
-            super();
-            this.listView = listView;
-            hbox.getChildren().addAll(label, pane, button);
-            HBox.setHgrow(pane, Priority.ALWAYS);
-            button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    System.out.println("button X clicked " + lastItem);
-                    success = new DB().deleteTask(lastItem);
-                    if(success) listView.getItems().remove(lastItem);
-                }
-            });
-        }
-
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            setText(null);  // No text in label of super class
-            if (empty) {
-                lastItem = null;
-                setGraphic(null);
-            } else {
-                lastItem = item;
-                label.setText(item!=null ? item : "<null>");
-                //listView.getItems().remove(item);
-                /*
-                 * File image = new File("D:/Workspace/SEE/src/images/expand.png");
-                try {
-					setGraphic(new ImageView(new Image(image.toURL().toString())));
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                 */
-                setGraphic(hbox);
-            }
-        }
-    }
 	
 	public void parseIssues(){
 		map = new HashMap<String,String>();
