@@ -1,5 +1,6 @@
 package logic;
 
+//role of a user
 public class Role {
 
 	private String role;

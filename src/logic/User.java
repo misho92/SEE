@@ -2,6 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 
+//user object
 public class User {
 
 	private String email;

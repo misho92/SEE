@@ -17,6 +17,7 @@ public class Client extends Application implements Hello{
 
 	//private Client() {}
 
+	//start client
 	@Override
 	  public void start(Stage stage) throws IOException {
 	    AnchorPane root = (AnchorPane) FXMLLoader.load(getClass().getResource("/GUI/Start.fxml"));

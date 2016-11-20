@@ -1,5 +1,6 @@
 package logic;
 
+//status of a task
 public class Status {
 
 	public String status;

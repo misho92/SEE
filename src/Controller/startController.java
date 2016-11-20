@@ -45,7 +45,7 @@ public class StartController implements Initializable {
 
     public void initialize(URL location, ResourceBundle resources) {
 
-        //The button event for the login button
+        //The button event for the login button with JIRA API
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)   {
             	try {
@@ -84,35 +84,6 @@ public class StartController implements Initializable {
         			 } catch (IOException ex) {
         				ex.printStackTrace();
         			 }
-            }
-        });
-        
-        newUserButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e)   {
-            	WelcomeController welcome = new WelcomeController();
-            	//welcome.getConnection();
-            	if(!usernameField.getText().equals("") && !passwordField.getText().equals("") ){
-            			//&& welcome.register(usernameField.getText(),passwordField.getText())){
-            		try{
-            			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
-            			Parent root = (Parent) loader.load();
-            			final Stage stage = new Stage();
-            			stage.setTitle("Dashboard");
-            			stage.setScene(new Scene(root,1500,800));
-            			stage.show();
-            			Stage closingStage = (Stage) newUserButton.getScene().getWindow();
-            			closingStage.close();
-            		}catch(final IOException ex){
-            			ex.getStackTrace();
-            		}
-            	}
-            	else{
-            		Alert alert = new Alert(AlertType.ERROR);
-                	alert.setTitle("Error Dialog");
-                	alert.setHeaderText("Duplicate username");
-                	alert.setContentText("Username already exists");
-                	alert.showAndWait();	
-            	}
             }
         });
     }

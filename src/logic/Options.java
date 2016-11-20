@@ -1,5 +1,6 @@
 package logic;
 
+//options for status of a task and role of a user
 public class Options {
 
 	public final String inProgress = "in progress";

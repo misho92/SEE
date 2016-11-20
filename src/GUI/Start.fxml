@@ -23,6 +23,5 @@
         <Font size="22.0" />
       </font>
     </Label>
-    <Button id="loginButton" fx:id="newUserButton" cancelButton="false" contentDisplay="CENTER" defaultButton="true" font="$x1" layoutX="725" layoutY="313.0" mnemonicParsing="false" opacity="1.0" prefHeight="28.0" prefWidth="92.0" text="New User" underline="false" />
   </children>
 </AnchorPane>

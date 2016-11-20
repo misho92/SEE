@@ -6,6 +6,7 @@ import java.util.Date;
 import logic.User;
 import logic.Status;
 
+//class representing Task object
 public class Task {
 
 	private String title;

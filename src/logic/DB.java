@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+//DB class for all related activities
 public class DB {
 	
 	// JDBC driver name and database URL
@@ -26,6 +27,7 @@ public class DB {
 		String username;
 		String pass;
 		
+		//connect to mysql
 		public Connection getConnection() {
 
 			try {
@@ -46,92 +48,6 @@ public class DB {
 			return conn;
 		}
 		
-		public boolean login(String username, String pass) {
-			try {
-				//avoid sql injection
-				st = conn.prepareStatement("SELECT * FROM SEE.user WHERE username = ? AND pass = ?");
-				st.setString(1, username);
-				st.setString(2, pass);
-
-				rs = st.executeQuery();
-				
-				if (rs.next()) {
-					//name = "Welcome " + rs.getString("username");
-				    return true;
-				}
-				
-				/*Extract data from result set
-				while (rs.next()) {
-					// Retrieve by column name
-					name = "Welcome " + rs.getString("username");
-				}*/
-				
-				System.out.println("Query executed");
-				rs.close();
-				st.close();
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("Query failed to execute");
-			}
-			finally{
-			      //finally block used to close resources
-			      try{
-			         if(st!=null)
-			            st.close();
-			      }catch(SQLException se2){}
-			      try{
-			         if(conn!=null)
-			            conn.close();
-			      }catch(SQLException se){
-			         se.printStackTrace();
-			      }
-			}
-			return false;
-		}
-		
-		public boolean register(String username, String pass){
-			try {
-				st = conn.prepareStatement("INSERT INTO see.user VALUES(?,?)");
-				st.setString(1, username);
-				st.setString(2, pass);
-				int rows = st.executeUpdate();
-				
-				if (rows != 0) {
-				    return true;
-				}
-				
-				System.out.println("Query executed");
-				rs.close();
-				st.close();
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("Query failed to execute");
-				Alert alert = new Alert(AlertType.ERROR);
-	        	alert.setTitle("Error Dialog");
-	        	alert.setHeaderText("Something went wrong");
-	        	alert.setContentText("Registration failed");
-	        	alert.showAndWait();
-			}
-			finally{
-			      //finally block used to close resources
-			      try{
-			         if(st!=null)
-			            st.close();
-			      }catch(SQLException se2){}
-			      try{
-			         if(conn!=null)
-			            conn.close();
-			      }catch(SQLException se){
-			         se.printStackTrace();
-			      }
-			}
-			return false;
-		}
-
 		//get all tasks and subtasks for a particular issue
 		public ArrayList<Task> getTasksForIssue(String issue){
 			ArrayList<Task> tasks = new ArrayList<Task>();
