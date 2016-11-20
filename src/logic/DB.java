@@ -164,4 +164,44 @@ public class DB {
         	alert.setContentText("Could not execute query");
         	alert.showAndWait();
 		}
+
+		//get all usernamaes
+		public ArrayList<String> getUsersName() {
+			// TODO Auto-generated method stub
+			getConnection();
+			ArrayList<String> names = new ArrayList<String>();
+			try {
+				//avoid sql injection
+				st = conn.prepareStatement("SELECT * FROM USER");
+				rs = st.executeQuery();
+
+				while (rs.next()) {
+					//get all display name of a user
+					names.add(rs.getString("displayName"));
+				}
+				System.out.println("Query executed");
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+				displayErrorDB();
+			}
+			finally{
+			      //finally block used to close resources
+			      try{
+			         if(st!=null)
+			            st.close();
+			      }catch(SQLException se2){}
+			      try{
+			         if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){
+			         se.printStackTrace();
+			      }
+			}
+			return names;
+		}
 }

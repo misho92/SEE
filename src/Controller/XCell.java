@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import logic.DB;
 
+//custom listview cell/row
 class XCell extends ListCell<String> {
     HBox hbox = new HBox();
     Label label = new Label("(empty)");
@@ -48,7 +49,7 @@ class XCell extends ListCell<String> {
     @Override
     protected void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
-        setText(null);  // No text in label of super class
+        setText(null);
         if (empty) {
             lastItem = null;
             setGraphic(null);

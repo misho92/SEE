@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?scenebuilder-background-color 0x008effff?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.collections.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Controller.TaskController">
+  <children>
+    <Label fx:id="title" layoutX="50" layoutY="25" text="Title"></Label>
+    <TextField fx:id="titleField" layoutX="100" layoutY="25" prefWidth="350"></TextField>
+    <Label fx:id="assignee" layoutX="50" layoutY="75" text="Assignee"></Label>
+    <TextField fx:id="assigneeField" layoutX="125" layoutY="75" prefWidth="200"></TextField>
+    <Label layoutX="50" layoutY="125" text="Priority"></Label>
+    <ComboBox fx:id="priority" layoutX="125" layoutY="125" value="5">
+	    <items>
+	    	<FXCollections fx:factory="observableArrayList">
+	        	<String fx:id="5" fx:value="5" />
+	        	<String fx:id="4" fx:value="4" />
+	        	<String fx:id="3" fx:value="3" />
+	        	<String fx:id="2" fx:value="2" />
+	        	<String fx:id="1" fx:value="1" />
+	        </FXCollections>
+	    </items>
+	</ComboBox>
+	<Label layoutX="50" layoutY="175" text="Start Date"></Label>
+	<DatePicker fx:id="start" layoutX="150" layoutY="175" />
+	<Label layoutX="50" layoutY="225" text="Due Date"></Label>
+	<DatePicker fx:id="end" layoutX="150" layoutY="225" />
+  </children>
+</AnchorPane>

@@ -13,6 +13,8 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -21,9 +23,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import logic.DB;
 
@@ -201,6 +205,18 @@ public class WelcomeController {
 	//handling adding a task
 	private void openTask() {
 		System.out.println("openTask clicked");
+		AnchorPane root = null;
+		try {
+			root = (AnchorPane) FXMLLoader.load(getClass().getResource("/GUI/addTask.fxml"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		final Stage stage = new Stage();
+        Scene scene = new Scene(root, 500, 650);
+        stage.setTitle("Add Task");
+        stage.setScene(scene);
+        stage.show();
 	}
 	
 	//handling adding a subtask
