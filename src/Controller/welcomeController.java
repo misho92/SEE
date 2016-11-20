@@ -124,9 +124,9 @@ public class WelcomeController {
 	
 	//get project roles http://messir.uni.lu:8085/jira/rest/api/2/user?username=Mihail&expand=applicationRoles
 	
+	//initialize all components
 	@FXML
     public void initialize() {
-        welcome.setText(name);
         parseIssues();
         listIssues.setItems(FXCollections.observableList(issues));
         listIssues.setPrefHeight(800);
@@ -214,7 +214,7 @@ public class WelcomeController {
 			e.printStackTrace();
 		}
 		TaskController controller = loader.<TaskController>getController();
-		controller.initDate(listIssues.getSelectionModel().getSelectedItem().toString());
+		controller.initDate(listIssues.getSelectionModel().getSelectedItem().toString(), this);
 		final Stage stage = new Stage();
         Scene scene = new Scene(root, 500, 650);
         stage.setTitle("Add Task");

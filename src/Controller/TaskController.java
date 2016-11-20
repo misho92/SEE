@@ -46,6 +46,8 @@ public class TaskController {
 	
 	String issue;
 	
+	WelcomeController welcomeController;
+	
 	@FXML
 	public void initialize(){
 		//autocompletion assignee
@@ -108,14 +110,16 @@ public class TaskController {
                 			priority.getSelectionModel().getSelectedItem().toString());
                 	//shut stage on clicking save
                 	Stage stage = (Stage) save.getScene().getWindow();
-                	 stage.close();
+                	stage.close();
+                	welcomeController.initialize();
                 }
             }
         });
 	}
 	
-	public void initDate(String issue){
+	public void initDate(String issue, WelcomeController welcomeController){
 		this.issue = issue;
+		this.welcomeController = welcomeController;
 	}
 	
 	public boolean checkValidity(){
