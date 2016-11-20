@@ -121,8 +121,9 @@ public class DB {
 		}
 		
 		//delete all tasks and its subtasks
-		public void deleteTask(String task){
+		public boolean deleteTask(String task){
 			getConnection();
+			boolean success = false;
 			try {
 				//avoid sql injection
 				st = conn.prepareStatement("DELETE FROM TASK WHERE title = ? OR mainTask = ?");
@@ -130,13 +131,14 @@ public class DB {
 				st.setString(2, task);
 				st.executeUpdate();
 				System.out.println("Query executed");
-				rs.close();
+				success = true;
 				st.close();
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.out.println("Query failed to execute");
+				success = false;
 				displayErrorDB();
 			}
 			finally{
@@ -152,6 +154,7 @@ public class DB {
 			         se.printStackTrace();
 			      }
 			}
+			return success;
 		}
 		
 		public void displayErrorDB(){

@@ -174,9 +174,15 @@ public class WelcomeController {
             for(int i = 0; i < tasks.size(); i++ ){
             	listTasks.getItems().add(tasks.get(i).getTitle());
             	logic.Task t = tasks.get(i);
+            	/*deleting tasks and subtasks if any from list view
+            	if(t.getSubTasks().size() != 0) t.getSubTasks().clear();
+            	tasks.remove(t);
+            	for(logic.Task t: tasks){
+            		listTasks.getItems().add(t.getTitle());
+            	}*/
             	listTasks.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 		            public ListCell<String> call(ListView<String> param) {
-		                return new XCell();
+		                return new XCell(listTasks);
 		            }
 		        });
             }
@@ -200,7 +206,7 @@ public class WelcomeController {
         				listSubTasks.getItems().add(tasks.get(i).getSubTasks().get(j).getTitle());
         				listSubTasks.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
         		            public ListCell<String> call(ListView<String> param) {
-        		                return new XCell();
+        		                return new XCell(listSubTasks);
         		            }
         		        });
                     }
@@ -243,16 +249,20 @@ public class WelcomeController {
         Pane pane = new Pane();
         Button button = new Button("X");
         String lastItem;
+        ListView<String> listView;
+        boolean success = false;
 
-        public XCell() {
+        public XCell(ListView<String> listView) {
             super();
+            this.listView = listView;
             hbox.getChildren().addAll(label, pane, button);
             HBox.setHgrow(pane, Priority.ALWAYS);
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     System.out.println("button X clicked " + lastItem);
-                    new DB().deleteTask(lastItem);
+                    success = new DB().deleteTask(lastItem);
+                    if(success) listView.getItems().remove(lastItem);
                 }
             });
         }
@@ -267,6 +277,7 @@ public class WelcomeController {
             } else {
                 lastItem = item;
                 label.setText(item!=null ? item : "<null>");
+                //listView.getItems().remove(item);
                 /*
                  * File image = new File("D:/Workspace/SEE/src/images/expand.png");
                 try {
