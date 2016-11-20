@@ -14,6 +14,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -204,14 +205,16 @@ public class WelcomeController {
 	
 	//handling adding a task
 	private void openTask() {
-		System.out.println("openTask clicked");
-		AnchorPane root = null;
+		final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/addTask.fxml"));
+		Parent root = null;
 		try {
-			root = (AnchorPane) FXMLLoader.load(getClass().getResource("/GUI/addTask.fxml"));
+			root = (Parent) loader.load();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		TaskController controller = loader.<TaskController>getController();
+		controller.initDate(listIssues.getSelectionModel().getSelectedItem().toString());
 		final Stage stage = new Stage();
         Scene scene = new Scene(root, 500, 650);
         stage.setTitle("Add Task");

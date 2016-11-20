@@ -33,5 +33,7 @@
 	<DatePicker fx:id="start" layoutX="150" layoutY="175" />
 	<Label layoutX="50" layoutY="225" text="Due Date"></Label>
 	<DatePicker fx:id="end" layoutX="150" layoutY="225" />
+	<TextArea fx:id="description" layoutX="50" layoutY="275" prefWidth="400" prefHeight="300"/>
+	<Button fx:id="save" layoutX="225" layoutY="600" text="Save"></Button>
   </children>
 </AnchorPane>

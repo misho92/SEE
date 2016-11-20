@@ -1,6 +1,7 @@
 package logic;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -42,6 +43,7 @@ public class DB {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				displayErrorDB();
 			}
 
 			System.out.println("Connected to database");
@@ -203,5 +205,44 @@ public class DB {
 			      }
 			}
 			return names;
+		}
+
+		public void addTask(String title, String description, String assignee, String status,
+				Date start, Date end, String issueName, String priority) {
+			getConnection();
+			try {
+				//avoid sql injection
+				st = conn.prepareStatement("INSERT INTO TASK VALUES(?,?,?,null,?,?,?,?,?)");
+				st.setString(1, title);
+				st.setString(2, description);
+				st.setString(3, assignee);
+				st.setString(4, status);
+				st.setDate(5, start);
+				st.setDate(6, end);
+				st.setString(7, issueName);
+				st.setString(8, priority);
+				st.executeUpdate();
+				System.out.println("Query executed");
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+				displayErrorDB();
+			}
+			finally{
+			      //finally block used to close resources
+			      try{
+			         if(st!=null)
+			            st.close();
+			      }catch(SQLException se2){}
+			      try{
+			         if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){
+			         se.printStackTrace();
+			      }
+			}
 		}
 }
