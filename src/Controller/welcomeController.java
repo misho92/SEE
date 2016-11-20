@@ -7,56 +7,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.sql.*;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
-import com.sun.javafx.geom.Rectangle;
-import com.sun.javafx.tk.Toolkit.Task;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeView;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import logic.DB;
 
@@ -163,7 +130,7 @@ public class WelcomeController {
         details.setFont(Font.font(null, FontWeight.BOLD, 20));
         devDetails.setFont(Font.font(null, FontWeight.BOLD, 20));
         subDevDetails.setFont(Font.font(null, FontWeight.BOLD, 20));
-        //list view listener
+        //issue list listener
         listIssues.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             type.setText("Type: " + map.get(newValue.toString()).split("name")[1].substring(3).split("\"")[0]);
             priority.setText("Priority: " + map.get(newValue.toString()).split("priority")[2].split("name")[1].substring(3).split("\"")[0]);
@@ -173,13 +140,6 @@ public class WelcomeController {
             if(listSubTasks.getItems().size() != 0) listSubTasks.getItems().clear();
             for(int i = 0; i < tasks.size(); i++ ){
             	listTasks.getItems().add(tasks.get(i).getTitle());
-            	logic.Task t = tasks.get(i);
-            	/*deleting tasks and subtasks if any from list view
-            	if(t.getSubTasks().size() != 0) t.getSubTasks().clear();
-            	tasks.remove(t);
-            	for(logic.Task t: tasks){
-            		listTasks.getItems().add(t.getTitle());
-            	}*/
             	listTasks.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 		            public ListCell<String> call(ListView<String> param) {
 		                return new XCell(listTasks, listSubTasks, "task");
@@ -188,6 +148,8 @@ public class WelcomeController {
             }
             //description.setDisable(true);
         });
+        
+        //task list listener
         listTasks.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
         	for(int i = 0; i < tasks.size(); i++ ){
         		if(tasks.get(i).getTitle().equals(newValue)){
@@ -199,8 +161,6 @@ public class WelcomeController {
         			end.setText("Due date: " + tasks.get(i).getDueDate());
         			description.setText(tasks.get(i).getDescription());
         			subTasks = tasks.get(i).getSubTasks();
-        			//issues.remove(2);
-        			//listIssues.setItems(FXCollections.observableList(issues));
         			if(listTasks.getItems().size() != 0) listSubTasks.getItems().clear();
         			for(int j = 0; j < tasks.get(i).getSubTasks().size(); j++ ){
         				listSubTasks.getItems().add(tasks.get(i).getSubTasks().get(j).getTitle());
@@ -214,6 +174,7 @@ public class WelcomeController {
             }
         });
         
+        //subtask list listener
         listSubTasks.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             for(int i = 0; i < subTasks.size(); i++){
             	if(subTasks.get(i).getTitle().equals(newValue)){
@@ -227,6 +188,8 @@ public class WelcomeController {
             	}
             }
         });
+        
+        //adding the plus image
         File file = new File("D:/Workspace/SEE/src/images/plus.png");
         Image image = new Image(file.toURI().toString());
         plus.setImage(image);
@@ -235,14 +198,17 @@ public class WelcomeController {
         sPlus.setOnMouseClicked(event -> openSubTask());
     }
 	
+	//handling adding a task
 	private void openTask() {
 		System.out.println("openTask clicked");
 	}
 	
+	//handling adding a subtask
 	private void openSubTask(){
 		System.out.println("openSubTask clicked");
 	}
 	
+	//parse all issues from JIRA API
 	public void parseIssues(){
 		map = new HashMap<String,String>();
 		issues = new ArrayList<String>();
@@ -294,9 +260,5 @@ public class WelcomeController {
 			e.printStackTrace();
 		 }
 		return output;
-	}
-	
-	public void getText(){
-		System.out.println(welcome.getText());
 	}
 }
