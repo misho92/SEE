@@ -74,6 +74,7 @@ public class DB {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.out.println("Query failed to execute");
+				displayErrorDB();
 			}
 			finally{
 			      //finally block used to close resources
@@ -114,7 +115,50 @@ public class DB {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.out.println("Query failed to execute");
+				displayErrorDB();
 			}
 			return task;
+		}
+		
+		//delete all tasks and its subtasks
+		public void deleteTask(String task){
+			getConnection();
+			try {
+				//avoid sql injection
+				st = conn.prepareStatement("DELETE FROM TASK WHERE title = ? OR mainTask = ?");
+				st.setString(1, task);
+				st.setString(2, task);
+				st.executeUpdate();
+				System.out.println("Query executed");
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+				displayErrorDB();
+			}
+			finally{
+			      //finally block used to close resources
+			      try{
+			         if(st!=null)
+			            st.close();
+			      }catch(SQLException se2){}
+			      try{
+			         if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){
+			         se.printStackTrace();
+			      }
+			}
+		}
+		
+		public void displayErrorDB(){
+			Alert alert = new Alert(AlertType.ERROR);
+        	alert.setTitle("Error Dialog");
+        	alert.setHeaderText("Error in Database");
+        	alert.setContentText("Could not execute query");
+        	alert.showAndWait();
 		}
 }

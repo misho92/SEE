@@ -31,6 +31,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -40,8 +43,10 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -51,6 +56,7 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import logic.DB;
 
@@ -138,6 +144,12 @@ public class WelcomeController {
 	
 	private ArrayList<logic.Task> subTasks;
 	
+	@FXML
+    private ImageView plus;
+	
+	@FXML
+    private ImageView sPlus;
+	
 	//get project roles http://messir.uni.lu:8085/jira/rest/api/2/user?username=Mihail&expand=applicationRoles
 	
 	@FXML
@@ -161,8 +173,14 @@ public class WelcomeController {
             if(listSubTasks.getItems().size() != 0) listSubTasks.getItems().clear();
             for(int i = 0; i < tasks.size(); i++ ){
             	listTasks.getItems().add(tasks.get(i).getTitle());
+            	logic.Task t = tasks.get(i);
+            	listTasks.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+		            public ListCell<String> call(ListView<String> param) {
+		                return new XCell();
+		            }
+		        });
             }
-            description.setDisable(true);
+            //description.setDisable(true);
         });
         listTasks.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
         	for(int i = 0; i < tasks.size(); i++ ){
@@ -175,6 +193,8 @@ public class WelcomeController {
         			end.setText("Due date: " + tasks.get(i).getDueDate());
         			description.setText(tasks.get(i).getDescription());
         			subTasks = tasks.get(i).getSubTasks();
+        			//issues.remove(2);
+        			//listIssues.setItems(FXCollections.observableList(issues));
         			if(listTasks.getItems().size() != 0) listSubTasks.getItems().clear();
         			for(int j = 0; j < tasks.get(i).getSubTasks().size(); j++ ){
         				listSubTasks.getItems().add(tasks.get(i).getSubTasks().get(j).getTitle());
@@ -201,9 +221,22 @@ public class WelcomeController {
             	}
             }
         });
-        
+        File file = new File("D:/Workspace/SEE/src/images/plus.png");
+        Image image = new Image(file.toURI().toString());
+        plus.setImage(image);
+        sPlus.setImage(image);
+        plus.setOnMouseClicked(event -> openTask());
+        sPlus.setOnMouseClicked(event -> openSubTask());
     }
 	
+	private void openTask() {
+		System.out.println("openTask clicked");
+	}
+	
+	private void openSubTask(){
+		System.out.println("openSubTask clicked");
+	}
+
 	static class XCell extends ListCell<String> {
         HBox hbox = new HBox();
         Label label = new Label("(empty)");
@@ -218,7 +251,8 @@ public class WelcomeController {
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    System.out.println(lastItem + " : " + event);
+                    System.out.println("button X clicked " + lastItem);
+                    new DB().deleteTask(lastItem);
                 }
             });
         }

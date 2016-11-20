@@ -25,7 +25,6 @@ public class Client extends Application implements Hello{
         stage.setTitle("Tesma collaboration development tool");
         stage.setScene(scene);
         stage.show();
-	    
 	  }
 	
 	public static void main(String[] args) {

@@ -9,6 +9,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.*?>
 <?scenebuilder-background-color 0x008effff?>
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Controller.WelcomeController">
@@ -22,6 +23,7 @@
     <Text fx:id="priority" layoutX="750" layoutY="100" text="Priority:"/>
     <Text fx:id="status" layoutX="900" layoutY="75" text="Status: "/>
     <Text fx:id="devDetails" layoutX="800" layoutY="125" text="Development task details"/>
+    <ImageView fx:id="plus" layoutX="1100" layoutY="105"></ImageView>
     <Text fx:id="title" layoutX="750" layoutY="150" text="Title: "/>
     <Text fx:id="assignee" layoutX="750" layoutY="175" text="Assignee: "/>
     <Text fx:id="tStatus" layoutX="750" layoutY="200" text="Status: "/>
@@ -30,6 +32,7 @@
     <Text fx:id="end" layoutX="750" layoutY="275" text="Due Date"/>
     <TextArea fx:id="description" text="Text1" layoutX="900" layoutY="150"/>
     <Text fx:id="subDevDetails" layoutX="800" layoutY="450" text="Development subtask details"/>
+    <ImageView fx:id="sPlus" layoutX="1100" layoutY="430"></ImageView>
     <Text fx:id="sTitle" layoutX="750" layoutY="475" text="Title: "/>
     <Text fx:id="sAssignee" layoutX="750" layoutY="500" text="Assignee: "/>
     <Text fx:id="sStatus" layoutX="750" layoutY="525" text="Status: "/>
