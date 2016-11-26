@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 //user object
 public class User {
+	
+	public User() {}
 
 	private String email;
 	

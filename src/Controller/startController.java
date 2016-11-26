@@ -1,6 +1,8 @@
 package Controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,6 +24,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import logic.DB;
+import logic.User;
 
 
 public class StartController implements Initializable {
@@ -46,12 +50,15 @@ public class StartController implements Initializable {
 
     public void initialize(URL location, ResourceBundle resources) {
 
+    	//http://messir.uni.lu:8085/jira/rest/api/2/user?username=Mihail
+    	
         //The button event for the login button with JIRA API
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)   {
             	try {
             		//authentication
-        			URL url = new URL("http://messir.uni.lu:8085/jira/rest/api/2/search?jql=project=SEEMT");
+        			URL url = new URL("http://messir.uni.lu:8085/jira/rest/api/2/user?username=" + 
+        					usernameField.getText());
         			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         			conn.setRequestMethod("GET");
         			conn.setRequestProperty("Accept", "application/json");
@@ -60,7 +67,19 @@ public class StartController implements Initializable {
         			String encoded = Base64.getEncoder().encodeToString(credentials);
         			conn.setRequestProperty("Authorization", "Basic " + encoded);
         			if(conn.getResponseCode() == 200){
-        				try{
+        				try{	
+        					//new DB().loadUser(email); */
+        					BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+        					String response = br.readLine();
+        					String email = null;
+        					while (response != null) {
+        						if(response.contains("email")){
+        							email = response.split("emailAddress")[1].substring(3).split("\"")[0];
+        							break;
+        						}
+        						response = br.readLine();
+        					}
+        					User user = new DB().loadUser(email);
                 			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
                 			//inject the conn into the loader at start up
                 			loader.setControllerFactory(new Callback<Class<?>, Object>() {
@@ -68,7 +87,7 @@ public class StartController implements Initializable {
                 			    public Object call(Class<?> controllerClass) {
                 			        if (controllerClass == WelcomeController.class) {
                 			        	WelcomeController controller = new WelcomeController();
-                			            controller.initData(encoded);
+                			            controller.initData(encoded, user);
                 			            return controller;
                 			        } else {
                 			            try {

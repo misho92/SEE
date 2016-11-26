@@ -33,6 +33,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import logic.DB;
+import logic.User;
 
 public class WelcomeController {
 
@@ -124,6 +125,8 @@ public class WelcomeController {
 	
 	private String encoded;
 	
+	private User currentUser;
+	
 	//get project roles http://messir.uni.lu:8085/jira/rest/api/2/user?username=Mihail&expand=applicationRoles
 	
 	//initialize all components
@@ -149,7 +152,7 @@ public class WelcomeController {
             	listTasks.getItems().add(tasks.get(i).getTitle());
             	listTasks.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 		            public ListCell<String> call(ListView<String> param) {
-		                return new XCell(listTasks, listSubTasks, "task");
+		                return new XCell(listTasks, listSubTasks, "task", currentUser);
 		            }
 		        });
             }
@@ -173,7 +176,7 @@ public class WelcomeController {
         				listSubTasks.getItems().add(tasks.get(i).getSubTasks().get(j).getTitle());
         				listSubTasks.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
         		            public ListCell<String> call(ListView<String> param) {
-        		                return new XCell(listTasks,listSubTasks,"subtask");
+        		                return new XCell(listTasks,listSubTasks,"subtask", currentUser);
         		            }
         		        });
                     }
@@ -311,7 +314,8 @@ public class WelcomeController {
 		return output;
 	}
 
-	public void initData(String encoded) {
+	public void initData(String encoded, User user) {
 		this.encoded = encoded;
+		this.currentUser = user;
 	}
 }

@@ -20,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import logic.DB;
+import logic.User;
 
 //custom listview cell/row
 class XCell extends ListCell<String> {
@@ -34,18 +35,27 @@ class XCell extends ListCell<String> {
     boolean success = false;
     String task;
     TaskController controller;
+    User user;
 
-    public XCell(ListView<String> listTasks, ListView<String> listSubTasks, String task) {
+    public XCell(ListView<String> listTasks, ListView<String> listSubTasks, String task, User user) {
         super();
         this.listTasks = listTasks;
         this.listSubTasks = listSubTasks;
         this.task = task;
+        this.user = user;
         File file = new File("D:/Workspace/SEE/src/images/pencil.jpg");
         Image image = new Image(file.toURI().toString());
         edit.setImage(image);
         hbox.getChildren().addAll(label, pane, edit, button);
         HBox.setHgrow(pane, Priority.ALWAYS);
         edit.setOnMouseClicked(event -> edit());
+        if(user.getRole().getRole().equals("developer")) button.setDisable(true);
+        for(int i = 0; i < listTasks.getItems().size(); i++){
+        	//if you are not the assignee of the task you shall not edit it
+        	if(!user.getName().equals(new DB().getAssigneeForTask(listTasks.getItems().get(i)))) {
+        		//edit.setDisable(true);
+        	}
+        }
         //deletion button handler
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override

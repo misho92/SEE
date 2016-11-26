@@ -358,6 +358,93 @@ public class DB {
 			         se.printStackTrace();
 			      }
 			}
-			
+		}
+
+		public User loadUser(String email) {
+			getConnection();
+			User user = new User();
+			ArrayList<logic.Task> tasks = new ArrayList<logic.Task>();
+			try {
+				st = conn.prepareStatement("SELECT * FROM USER WHERE EMAIL = ?");
+				// avoid sql injection
+				st.setString(1, email);
+				rs = st.executeQuery();
+		
+				while (rs.next()) {
+					user.setEmail(email);
+					user.setName(rs.getString("displayName"));
+					user.setRole(new Role(rs.getString("role")));
+				}
+				
+				st = conn.prepareStatement("SELECT * FROM TASK WHERE assignee = ?");
+				st.setString(1, user.getName());
+				rs = st.executeQuery();
+				while (rs.next()) {
+					tasks.add(new Task(rs.getString("title"), user, new Status(rs.getString("status")), 
+							rs.getDate("startDate"), rs.getDate("dueDate"), rs.getString("description"), 
+							rs.getInt("priority")));
+				}
+				user.setTasks(tasks);
+				System.out.println("Query executed");
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+				displayErrorDB();
+			} finally {
+				// finally block used to close resources
+				try {
+					if (st != null)
+						st.close();
+				} catch (SQLException se2) {
+				}
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				}
+			}
+			return user;
+		}
+
+		public String getAssigneeForTask(String task) {
+			getConnection();
+			String name = null;
+			try {
+				st = conn.prepareStatement("SELECT * FROM TASK WHERE title = ?");
+				// avoid sql injection
+				st.setString(1, task);
+				rs = st.executeQuery();
+				while (rs.next()) {
+					name = rs.getString("assignee");
+				}
+				System.out.println("Query executed");
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+				displayErrorDB();
+			} finally {
+				// finally block used to close resources
+				try {
+					if (st != null)
+						st.close();
+				} catch (SQLException se2) {
+				}
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				}
+			}
+			return name;
 		}
 }
