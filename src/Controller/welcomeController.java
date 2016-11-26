@@ -7,7 +7,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -121,6 +123,8 @@ public class WelcomeController {
 	
 	@FXML
     private ImageView sPlus;
+	
+	private String encoded;
 	
 	//get project roles http://messir.uni.lu:8085/jira/rest/api/2/user?username=Mihail&expand=applicationRoles
 	
@@ -245,14 +249,11 @@ public class WelcomeController {
 		String output = "";
 		try {
 			//URL url = new URL("http://messir.uni.lu:8085/jira/rest/api/2/search?jql=project=test");
-			URL url = new URL("http://messir.uni.lu:8085/jira/rest/api/2/search?jql=project=test");
+			URL url = new URL("http://messir.uni.lu:8085/jira/rest/api/2/search?jql=project=SEEMT");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
-			//String auth = name + ":" + pass;
-			//byte[] credentials = auth.getBytes(StandardCharsets.UTF_8);
-			//String encoded = Base64.getEncoder().encodeToString(credentials);
-			//conn.setRequestProperty("Authorization", "Basic " + encoded);
+			conn.setRequestProperty("Authorization", "Basic " + encoded);
 			System.out.println(conn.getResponseCode());
 			if (conn.getResponseCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
@@ -270,14 +271,17 @@ public class WelcomeController {
 				output += response;
 				response = br.readLine();
 			}
-			System.out.println("Response");
-			System.out.println(output);
+			System.out.println("Response \n" + output);
 			conn.disconnect();
 		 } catch (MalformedURLException e) {
 			e.printStackTrace();
 		 } catch (IOException e) {
 			e.printStackTrace();
 		 }
-		return output;
+return output;
+	}
+
+	public void initData(String encoded) {
+		this.encoded = encoded;
 	}
 }
