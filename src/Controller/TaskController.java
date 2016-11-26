@@ -155,10 +155,11 @@ public class TaskController {
 			Alert alert = new Alert(AlertType.ERROR);
         	alert.setTitle("Error Dialog");
         	alert.setHeaderText("Too many characters");
-        	alert.setContentText("Please type maximum 25 characters for the title");
+        	alert.setContentText("Please type maximum 20 characters for the title");
         	alert.showAndWait();
 		}
-		else if(titleField.getText() != "" && assigneeField.getText() != "" && end.getValue() != null){
+		else if(!titleField.getText().trim().isEmpty() && titleField.getText() != null && 
+				!assigneeField.getText().trim().isEmpty() && assigneeField.getText() != null && end.getValue() != null){
 			valid = true;
 		}
 		else{

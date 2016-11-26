@@ -16,7 +16,7 @@ public class DB {
 	
 	// JDBC driver name and database URL
 		static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-		static final String DB_URL = "jdbc:mysql://localhost/see";
+		static final String DB_URL = "jdbc:mysql://localhost/see?allowMultiQueries=true";
 
 		// Database credentials
 		static final String USER = "root";
@@ -254,14 +254,13 @@ public class DB {
 			try {
 				if(task.equals("task")){
 					st = conn.prepareStatement("SELECT * FROM TASK WHERE title = ?");
-					st.setString(1, item);
 				}
 				else{
-					st = conn.prepareStatement("SELECT * FROM USER");
-				}
-				
-				// avoid sql injection
 					
+					st = conn.prepareStatement("SELECT * FROM TASK WHERE mainTask = ?");
+				}
+				// avoid sql injection
+				st.setString(1, item);
 				rs = st.executeQuery();
 		
 				while (rs.next()) {
@@ -306,18 +305,36 @@ public class DB {
 				Date start, Date end, String issueName, String priority, String oldValue) {
 			getConnection();
 			try {
-				//avoid sql injection
-				st = conn.prepareStatement("UPDATE TASK SET title = ?, description = ?, assignee = ?, mainTask = null, "
-						+ "status = ?, startDate = ?, dueDate = ?, priority = ? WHERE title = ?");
-				st.setString(1, title);
-				st.setString(2, description);
-				st.setString(3, assignee);
-				//st.setString(4, mainTask);
-				st.setString(4, status);
-				st.setDate(5, start);
-				st.setDate(6, end);
-				st.setString(7, priority);
-				st.setString(8, oldValue);
+				//edit subtask
+				if(mainTask != null){
+					st = conn.prepareStatement("UPDATE TASK SET title = ?, description = ?, assignee = ?, mainTask = ?, "
+							+ "status = ?, startDate = ?, dueDate = ?, priority = ? WHERE title = ?");
+					st.setString(1, title);
+					st.setString(2, description);
+					st.setString(3, assignee);
+					st.setString(4, mainTask);
+					st.setString(5, status);
+					st.setDate(6, start);
+					st.setDate(7, end);
+					st.setString(8, priority);
+					st.setString(9, oldValue);
+				}
+				else{
+					//edit task
+					st = conn.prepareStatement("UPDATE TASK SET title = ?, description = ?, assignee = ?, mainTask = null, "
+							+ "status = ?, startDate = ?, dueDate = ?, priority = ? WHERE title = ?; UPDATE TASK SET "
+							+ "mainTask = ? WHERE mainTask = ?");
+					st.setString(1, title);
+					st.setString(2, description);
+					st.setString(3, assignee);
+					st.setString(4, status);
+					st.setDate(5, start);
+					st.setDate(6, end);
+					st.setString(7, priority);
+					st.setString(8, oldValue);
+					st.setString(9, title);
+					st.setString(10, oldValue);
+				}
 				st.executeUpdate();
 				System.out.println("Query executed");
 				st.close();

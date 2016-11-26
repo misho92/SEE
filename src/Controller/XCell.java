@@ -66,6 +66,7 @@ class XCell extends ListCell<String> {
     public void edit(){
     	final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/addTask.fxml"));
 		Parent root = null;
+		ArrayList<String> result;
 		try {
 			root = (Parent) loader.load();
 		} catch (IOException e) {
@@ -77,7 +78,7 @@ class XCell extends ListCell<String> {
         Scene scene = new Scene(root, 500, 650);
     	if(task.equals("task")){
     		stage.setTitle("Edit Task");
-    		ArrayList<String> result = new DB().loadTask(task, lastItem);
+    		result = new DB().loadTask(task, lastItem);
     		controller.setTextTitleField(result.get(0));
     		controller.setTextAssigneeField(result.get(2));
     		controller.setPriority(result.get(8));
@@ -88,8 +89,15 @@ class XCell extends ListCell<String> {
     	}
     	else{
     		stage.setTitle("Edit subTask");
+    		result = new DB().loadTask(task, listTasks.getSelectionModel().getSelectedItem().toString());
+    		controller.setTextTitleField(result.get(0));
+    		controller.setTextAssigneeField(result.get(2));
+    		controller.setPriority(result.get(8));
+    		controller.setStartDate(result.get(5));
+    		controller.setDueDate(result.get(6));
+    		controller.setDescription(result.get(1));
+    		controller.edit(listTasks.getSelectionModel().getSelectedItem().toString(), result.get(0));
     	}
-		//controller.initData(listIssues.getSelectionModel().getSelectedItem().toString(), this, null);
         stage.setScene(scene);
         stage.show();
     }
