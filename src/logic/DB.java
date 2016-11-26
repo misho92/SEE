@@ -207,20 +207,21 @@ public class DB {
 			return names;
 		}
 
-		public void addTask(String title, String description, String assignee, String status,
+		public void addTask(String title, String description, String assignee, String mainTask, String status,
 				Date start, Date end, String issueName, String priority) {
 			getConnection();
 			try {
 				//avoid sql injection
-				st = conn.prepareStatement("INSERT INTO TASK VALUES(?,?,?,null,?,?,?,?,?)");
+				st = conn.prepareStatement("INSERT INTO TASK VALUES(?,?,?,?,?,?,?,?,?)");
 				st.setString(1, title);
 				st.setString(2, description);
 				st.setString(3, assignee);
-				st.setString(4, status);
-				st.setDate(5, start);
-				st.setDate(6, end);
-				st.setString(7, issueName);
-				st.setString(8, priority);
+				st.setString(4, mainTask);
+				st.setString(5, status);
+				st.setDate(6, start);
+				st.setDate(7, end);
+				st.setString(8, issueName);
+				st.setString(9, priority);
 				st.executeUpdate();
 				System.out.println("Query executed");
 				st.close();

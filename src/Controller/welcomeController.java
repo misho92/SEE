@@ -110,8 +110,6 @@ public class WelcomeController {
 	
 	static List<String> issues;
 	
-	private String name;
-	
 	private static HashMap<String,String> map;
 	
 	private ArrayList<logic.Task> tasks;
@@ -209,26 +207,58 @@ public class WelcomeController {
 	
 	//handling adding a task
 	private void openTask() {
-		final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/addTask.fxml"));
-		Parent root = null;
-		try {
-			root = (Parent) loader.load();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(!listIssues.getSelectionModel().isEmpty()){
+			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/addTask.fxml"));
+			Parent root = null;
+			try {
+				root = (Parent) loader.load();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			TaskController controller = loader.<TaskController>getController();
+			controller.initData(listIssues.getSelectionModel().getSelectedItem().toString(), this, null);
+			final Stage stage = new Stage();
+	        Scene scene = new Scene(root, 500, 650);
+	        stage.setTitle("Add Task");
+	        stage.setScene(scene);
+	        stage.show();
 		}
-		TaskController controller = loader.<TaskController>getController();
-		controller.initDate(listIssues.getSelectionModel().getSelectedItem().toString(), this);
-		final Stage stage = new Stage();
-        Scene scene = new Scene(root, 500, 650);
-        stage.setTitle("Add Task");
-        stage.setScene(scene);
-        stage.show();
+		else{
+			Alert alert = new Alert(AlertType.ERROR);
+        	alert.setTitle("Error Dialog");
+        	alert.setHeaderText("Select an issue");
+        	alert.setContentText("Pick an issue to which you want to associate the task");
+        	alert.showAndWait();
+		}
 	}
 	
 	//handling adding a subtask
 	private void openSubTask(){
-		System.out.println("openSubTask clicked");
+		if(!listTasks.getSelectionModel().isEmpty()){
+			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/addTask.fxml"));
+			Parent root = null;
+			try {
+				root = (Parent) loader.load();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			TaskController controller = loader.<TaskController>getController();
+			controller.initData(listIssues.getSelectionModel().getSelectedItem().toString(), this, listTasks.getSelectionModel().getSelectedItem().toString());
+			final Stage stage = new Stage();
+	        Scene scene = new Scene(root, 500, 650);
+	        stage.setTitle("Add subtask");
+	        stage.setScene(scene);
+	        stage.show();
+		}
+		else{
+			Alert alert = new Alert(AlertType.ERROR);
+        	alert.setTitle("Error Dialog");
+        	alert.setHeaderText("Select a task");
+        	alert.setContentText("Pick a task to which you want to associate the subtask");
+        	alert.showAndWait();
+		}
 	}
 	
 	//parse all issues from JIRA API
@@ -278,7 +308,7 @@ public class WelcomeController {
 		 } catch (IOException e) {
 			e.printStackTrace();
 		 }
-return output;
+		return output;
 	}
 
 	public void initData(String encoded) {

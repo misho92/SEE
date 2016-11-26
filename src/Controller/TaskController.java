@@ -1,25 +1,23 @@
 package Controller;
 
+import java.time.LocalDate;
+
+import org.controlsfx.control.textfield.TextFields;
+
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.util.Callback;
 import logic.DB;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-import org.controlsfx.control.textfield.TextFields;
 
 public class TaskController {
 
@@ -44,7 +42,9 @@ public class TaskController {
 	@FXML
     private TextArea description;
 	
-	String issue;
+	private String issue;
+	
+	private String task;
 	
 	WelcomeController welcomeController;
 	
@@ -105,9 +105,13 @@ public class TaskController {
             @Override
             public void handle(ActionEvent event) {
                 if(checkValidity()){
-                	new DB().addTask(titleField.getText(), description.getText(), assigneeField.getText(), "NEW", 
-                			java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()), issue, 
+                	if(task != null)new DB().addTask(titleField.getText(), description.getText(), 
+                			assigneeField.getText(), task, "NEW", java.sql.Date.valueOf(start.getValue()), 
+                			java.sql.Date.valueOf(end.getValue()), issue, 
                 			priority.getSelectionModel().getSelectedItem().toString());
+                	else new DB().addTask(titleField.getText(), description.getText(), assigneeField.getText(), null, 
+                			"NEW", java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()), 
+                			issue, priority.getSelectionModel().getSelectedItem().toString());
                 	//shut stage on clicking save
                 	Stage stage = (Stage) save.getScene().getWindow();
                 	stage.close();
@@ -117,14 +121,22 @@ public class TaskController {
         });
 	}
 	
-	public void initDate(String issue, WelcomeController welcomeController){
+	public void initData(String issue, WelcomeController welcomeController, String task){
 		this.issue = issue;
 		this.welcomeController = welcomeController;
+		this.task = task;
 	}
 	
 	public boolean checkValidity(){
 		boolean valid = false;
-		if(titleField.getText() != "" && assigneeField.getText() != "" && end.getValue() != null){
+		if(titleField.getLength() > 25){
+			Alert alert = new Alert(AlertType.ERROR);
+        	alert.setTitle("Error Dialog");
+        	alert.setHeaderText("Too many characters");
+        	alert.setContentText("Please type maximum 25 characters for the title");
+        	alert.showAndWait();
+		}
+		else if(titleField.getText() != "" && assigneeField.getText() != "" && end.getValue() != null){
 			valid = true;
 		}
 		else{
