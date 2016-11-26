@@ -1,6 +1,7 @@
 package Controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.controlsfx.control.textfield.TextFields;
 
@@ -121,6 +122,27 @@ public class TaskController {
         });
 	}
 	
+	public void edit(String task, String oldValue){
+		save.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(checkValidity()){
+                	if(task.equals("task"))new DB().editTask(titleField.getText(), description.getText(), 
+                			assigneeField.getText(), null, "NEW", java.sql.Date.valueOf(start.getValue()), 
+                			java.sql.Date.valueOf(end.getValue()), issue, 
+                			priority.getSelectionModel().getSelectedItem().toString(), oldValue);
+                	else new DB().editTask(titleField.getText(), description.getText(), assigneeField.getText(), task, 
+                			"NEW", java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()), 
+                			issue, priority.getSelectionModel().getSelectedItem().toString(), oldValue);
+                	//shut stage on clicking save
+                	Stage stage = (Stage) save.getScene().getWindow();
+                	stage.close();
+                	//welcomeController.initialize();
+                }
+            }
+        });
+	}
+	
 	public void initData(String issue, WelcomeController welcomeController, String task){
 		this.issue = issue;
 		this.welcomeController = welcomeController;
@@ -129,7 +151,7 @@ public class TaskController {
 	
 	public boolean checkValidity(){
 		boolean valid = false;
-		if(titleField.getLength() > 25){
+		if(titleField.getLength() > 20){
 			Alert alert = new Alert(AlertType.ERROR);
         	alert.setTitle("Error Dialog");
         	alert.setHeaderText("Too many characters");
@@ -147,5 +169,33 @@ public class TaskController {
         	alert.showAndWait();
 		}
 		return valid;
+	}
+
+	public void setTextTitleField(String text) {
+		this.titleField.setText(text);
+	}
+	
+	public void setTextAssigneeField(String text) {
+		this.assigneeField.setText(text);
+	}
+	
+	public void setPriority(String text) {
+		this.priority.getSelectionModel().select(Math.abs(Integer.parseInt(text) - 5));
+	}
+	
+	public void setStartDate(String start) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date = LocalDate.parse(start, formatter);
+		this.start.setValue(date);
+	}
+	
+	public void setDueDate(String end) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date = LocalDate.parse((CharSequence) end, formatter);
+		this.end.setValue(date);
+	}
+	
+	public void setDescription(String text) {
+		this.description.setText(text);
 	}
 }

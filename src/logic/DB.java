@@ -246,4 +246,101 @@ public class DB {
 			      }
 			}
 		}
+
+		public ArrayList<String> loadTask(String task, String item) {
+			// TODO Auto-generated method stub
+			getConnection();
+			ArrayList<String> details = new ArrayList<String>();
+			try {
+				if(task.equals("task")){
+					st = conn.prepareStatement("SELECT * FROM TASK WHERE title = ?");
+					st.setString(1, item);
+				}
+				else{
+					st = conn.prepareStatement("SELECT * FROM USER");
+				}
+				
+				// avoid sql injection
+					
+				rs = st.executeQuery();
+		
+				while (rs.next()) {
+					// get all display name of a user
+					details.add(rs.getString("title"));
+					details.add(rs.getString("description"));
+					details.add(rs.getString("assignee"));
+					details.add(rs.getString("mainTask"));
+					details.add(rs.getString("status"));
+					details.add(rs.getDate("startDate").toString());
+					details.add(rs.getDate("dueDate").toString());
+					details.add(rs.getString("issueName"));
+					details.add(rs.getString("priority"));
+				}
+				System.out.println("Query executed");
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+				displayErrorDB();
+			} finally {
+				// finally block used to close resources
+				try {
+					if (st != null)
+						st.close();
+				} catch (SQLException se2) {
+				}
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				}
+			}
+			return details;
+		}
+
+		public void editTask(String title, String description, String assignee, String mainTask, String status,
+				Date start, Date end, String issueName, String priority, String oldValue) {
+			getConnection();
+			try {
+				//avoid sql injection
+				st = conn.prepareStatement("UPDATE TASK SET title = ?, description = ?, assignee = ?, mainTask = null, "
+						+ "status = ?, startDate = ?, dueDate = ?, priority = ? WHERE title = ?");
+				st.setString(1, title);
+				st.setString(2, description);
+				st.setString(3, assignee);
+				//st.setString(4, mainTask);
+				st.setString(4, status);
+				st.setDate(5, start);
+				st.setDate(6, end);
+				st.setString(7, priority);
+				st.setString(8, oldValue);
+				st.executeUpdate();
+				System.out.println("Query executed");
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+				displayErrorDB();
+			}
+			finally{
+			      //finally block used to close resources
+			      try{
+			         if(st!=null)
+			            st.close();
+			      }catch(SQLException se2){}
+			      try{
+			         if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){
+			         se.printStackTrace();
+			      }
+			}
+			
+		}
 }
