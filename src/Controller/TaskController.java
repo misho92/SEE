@@ -49,6 +49,10 @@ public class TaskController {
 	
 	WelcomeController welcomeController;
 	
+	private int indexTask;
+	
+	private int indexSub;
+	
 	@FXML
 	public void initialize(){
 		//autocompletion assignee
@@ -117,6 +121,8 @@ public class TaskController {
                 	Stage stage = (Stage) save.getScene().getWindow();
                 	stage.close();
                 	welcomeController.initialize();
+                	welcomeController.listTasks.getSelectionModel().select(indexTask);
+                	welcomeController.listSubTasks.getSelectionModel().select(indexSub);
                 }
             }
         });
@@ -137,16 +143,17 @@ public class TaskController {
                 	//shut stage on clicking save
                 	Stage stage = (Stage) save.getScene().getWindow();
                 	stage.close();
-                	//welcomeController.initialize();
                 }
             }
         });
 	}
 	
-	public void initData(String issue, WelcomeController welcomeController, String task){
+	public void initData(String issue, WelcomeController welcomeController, String task, int indexTask, int indexSub){
 		this.issue = issue;
 		this.welcomeController = welcomeController;
 		this.task = task;
+		this.indexTask = indexTask;
+		this.indexSub = indexSub;
 	}
 	
 	public boolean checkValidity(){

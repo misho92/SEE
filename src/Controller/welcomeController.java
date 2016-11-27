@@ -44,10 +44,10 @@ public class WelcomeController {
     private ListView listIssues;
 	
 	@FXML
-    private ListView listTasks;
+    ListView listTasks;
 	
 	@FXML
-    private ListView listSubTasks;
+	ListView listSubTasks;
 	
 	@FXML
     private Text details;
@@ -220,7 +220,9 @@ public class WelcomeController {
 				e.printStackTrace();
 			}
 			TaskController controller = loader.<TaskController>getController();
-			controller.initData(listIssues.getSelectionModel().getSelectedItem().toString(), this, null);
+			controller.initData(listIssues.getSelectionModel().getSelectedItem().toString(), this, null, 
+					listTasks.getSelectionModel().getSelectedIndex(), 
+					listSubTasks.getSelectionModel().getSelectedIndex());
 			final Stage stage = new Stage();
 	        Scene scene = new Scene(root, 500, 650);
 	        stage.setTitle("Add Task");
@@ -248,7 +250,10 @@ public class WelcomeController {
 				e.printStackTrace();
 			}
 			TaskController controller = loader.<TaskController>getController();
-			controller.initData(listIssues.getSelectionModel().getSelectedItem().toString(), this, listTasks.getSelectionModel().getSelectedItem().toString());
+			controller.initData(listIssues.getSelectionModel().getSelectedItem().toString(), this, 
+					listTasks.getSelectionModel().getSelectedItem().toString(), 
+					listTasks.getSelectionModel().getSelectedIndex(), 
+					listSubTasks.getSelectionModel().getSelectedIndex());
 			final Stage stage = new Stage();
 	        Scene scene = new Scene(root, 500, 650);
 	        stage.setTitle("Add subtask");

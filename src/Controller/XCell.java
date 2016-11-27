@@ -50,12 +50,6 @@ class XCell extends ListCell<String> {
         HBox.setHgrow(pane, Priority.ALWAYS);
         edit.setOnMouseClicked(event -> edit());
         if(user.getRole().getRole().equals("developer")) button.setDisable(true);
-        for(int i = 0; i < listTasks.getItems().size(); i++){
-        	//if you are not the assignee of the task you shall not edit it
-        	if(!user.getName().equals(new DB().getAssigneeForTask(listTasks.getItems().get(i)))) {
-        		//edit.setDisable(true);
-        	}
-        }
         //deletion button handler
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -88,7 +82,7 @@ class XCell extends ListCell<String> {
         Scene scene = new Scene(root, 500, 650);
     	if(task.equals("task")){
     		stage.setTitle("Edit Task");
-    		result = new DB().loadTask(task, lastItem);
+    		result = new DB().loadTask(task, lastItem, "", "");
     		controller.setTextTitleField(result.get(0));
     		controller.setTextAssigneeField(result.get(2));
     		controller.setPriority(result.get(8));
@@ -99,7 +93,8 @@ class XCell extends ListCell<String> {
     	}
     	else{
     		stage.setTitle("Edit subTask");
-    		result = new DB().loadTask(task, listTasks.getSelectionModel().getSelectedItem().toString());
+    		result = new DB().loadTask(task, listTasks.getSelectionModel().getSelectedItem().toString(), 
+    				user.getName(), listSubTasks.getSelectionModel().getSelectedItem());
     		controller.setTextTitleField(result.get(0));
     		controller.setTextAssigneeField(result.get(2));
     		controller.setPriority(result.get(8));
@@ -122,6 +117,10 @@ class XCell extends ListCell<String> {
         } else {
             lastItem = item;
             label.setText(item!=null ? item : "<null>");
+            //only edit tasks assigned to you
+            if(!user.getName().equals(new DB().getAssigneeForTask(item))) {
+        		edit.setDisable(true);
+        	}
             //listView.getItems().remove(item);
             /*
              * File image = new File("D:/Workspace/SEE/src/images/expand.png");

@@ -247,20 +247,23 @@ public class DB {
 			}
 		}
 
-		public ArrayList<String> loadTask(String task, String item) {
+		public ArrayList<String> loadTask(String task, String item, String user, String title) {
 			// TODO Auto-generated method stub
 			getConnection();
 			ArrayList<String> details = new ArrayList<String>();
 			try {
 				if(task.equals("task")){
 					st = conn.prepareStatement("SELECT * FROM TASK WHERE title = ?");
+					st.setString(1, item);
 				}
 				else{
-					
-					st = conn.prepareStatement("SELECT * FROM TASK WHERE mainTask = ?");
+					st = conn.prepareStatement("SELECT * FROM TASK WHERE mainTask = ? AND assignee = ? AND title = ?");
+					st.setString(1, item);
+					st.setString(2, user);
+					st.setString(3, title);
 				}
 				// avoid sql injection
-				st.setString(1, item);
+				
 				rs = st.executeQuery();
 		
 				while (rs.next()) {
