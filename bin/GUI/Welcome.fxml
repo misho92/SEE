@@ -30,7 +30,7 @@
     <Text fx:id="tPriority" layoutX="750" layoutY="225" text="Priority: "/>
     <Text fx:id="start" layoutX="750" layoutY="250" text="Start Date: "/>
     <Text fx:id="end" layoutX="750" layoutY="275" text="Due Date"/>
-    <TextArea fx:id="description" text="Text1" layoutX="900" layoutY="150"/>
+    <TextArea fx:id="description" layoutX="1000" layoutY="140"/>
     <Text fx:id="subDevDetails" layoutX="800" layoutY="450" text="Development subtask details"/>
     <ImageView fx:id="sPlus" layoutX="1100" layoutY="430"></ImageView>
     <Text fx:id="sTitle" layoutX="750" layoutY="475" text="Title: "/>
@@ -39,6 +39,6 @@
     <Text fx:id="sPriority" layoutX="750" layoutY="550" text="Priority: "/>
     <Text fx:id="sStart" layoutX="750" layoutY="575" text="Start Date: "/>
     <Text fx:id="sEnd" layoutX="750" layoutY="600" text="Due Date"/>
-    <TextArea fx:id="sDescription" layoutX="900" layoutY="475"/>
+    <TextArea fx:id="sDescription" layoutX="1000" layoutY="465"/>
   </children>
 </AnchorPane>

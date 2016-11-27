@@ -140,6 +140,10 @@ public class WelcomeController {
         details.setFont(Font.font(null, FontWeight.BOLD, 20));
         devDetails.setFont(Font.font(null, FontWeight.BOLD, 20));
         subDevDetails.setFont(Font.font(null, FontWeight.BOLD, 20));
+        description.setDisable(true);
+        sDescription.setDisable(true);
+        setTaskVisibility(false, false, false, false, false, false, false, false, false);
+        setSubTaskVisibility(false, false, false, false, false, false, false, false, false);
         //issue list listener
         listIssues.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             type.setText("Type: " + map.get(newValue.toString()).split("name")[1].substring(3).split("\"")[0]);
@@ -156,7 +160,8 @@ public class WelcomeController {
 		            }
 		        });
             }
-            //description.setDisable(true);
+            setTaskVisibility(true, true, false, false, false, false, false, false, false);
+            setSubTaskVisibility(false, false, false, false, false, false, false, false, false);
         });
         
         //task list listener
@@ -180,6 +185,8 @@ public class WelcomeController {
         		            }
         		        });
                     }
+        			setTaskVisibility(true, true, true, true, true, true, true, true, true);
+        			setSubTaskVisibility(true, true, false, false, false, false, false, false, false);
         		}
             }
         });
@@ -197,6 +204,7 @@ public class WelcomeController {
         			sDescription.setText(subTasks.get(i).getDescription());
             	}
             }
+            setSubTaskVisibility(true, true, true, true, true, true, true, true, true);
         });
         
         //adding the plus image
@@ -322,5 +330,31 @@ public class WelcomeController {
 	public void initData(String encoded, User user) {
 		this.encoded = encoded;
 		this.currentUser = user;
+	}
+	
+	public void setTaskVisibility(boolean devDetails, boolean plus, boolean title, boolean assignee, boolean tStatus,
+			boolean tPriority, boolean start, boolean end, boolean description){
+		this.devDetails.setVisible(devDetails);
+		this.plus.setVisible(plus);
+		this.title.setVisible(title);
+		this.assignee.setVisible(assignee);
+		this.tStatus.setVisible(tStatus);
+		this.tPriority.setVisible(tPriority);
+		this.start.setVisible(start);
+		this.end.setVisible(end);
+		this.description.setVisible(description);
+	}
+	
+	public void setSubTaskVisibility(boolean devDetails, boolean plus, boolean title, boolean assignee, boolean tStatus,
+			boolean tPriority, boolean start, boolean end, boolean description){
+		this.subDevDetails.setVisible(devDetails);
+		this.sPlus.setVisible(plus);
+		this.sTitle.setVisible(title);
+		this.sAssignee.setVisible(assignee);
+		this.sStatus.setVisible(tStatus);
+		this.sPriority.setVisible(tPriority);
+		this.sStart.setVisible(start);
+		this.sEnd.setVisible(end);
+		this.sDescription.setVisible(description);
 	}
 }
