@@ -64,6 +64,9 @@ public class TaskController {
 	private String text;
 	
 	private ArrayList<CheckMenuItem> usersMenu = new ArrayList<CheckMenuItem>();
+	
+	@FXML
+	private ComboBox status;
 
 	@FXML
 	public void initialize() {
@@ -127,11 +130,13 @@ public class TaskController {
 				if (checkValidity()) {
 					if (task != null)
 						new DB().addTask(titleField.getText(), description.getText(), text, task,
-								"NEW", java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
+								status.getSelectionModel().getSelectedItem().toString(), 
+								java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
 								issue, priority.getSelectionModel().getSelectedItem().toString());
 					else
 						new DB().addTask(titleField.getText(), description.getText(), text, null,
-								"NEW", java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
+								status.getSelectionModel().getSelectedItem().toString(), 
+								java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
 								issue, priority.getSelectionModel().getSelectedItem().toString());
 					// shut stage on clicking save
 					Stage stage = (Stage) save.getScene().getWindow();
@@ -173,11 +178,13 @@ public class TaskController {
 					System.out.println(text);
 					if (task.equals("task"))
 						new DB().editTask(titleField.getText(), description.getText(), text, null,
-								"NEW", java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
+								status.getSelectionModel().getSelectedItem().toString(), 
+								java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
 								issue, priority.getSelectionModel().getSelectedItem().toString(), oldValue);
 					else
 						new DB().editTask(titleField.getText(), description.getText(), text, task,
-								"NEW", java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
+								status.getSelectionModel().getSelectedItem().toString(), 
+								java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
 								issue, priority.getSelectionModel().getSelectedItem().toString(), oldValue);
 					//shut the stage on clicking save
 					Stage stage = (Stage) save.getScene().getWindow();
@@ -244,5 +251,9 @@ public class TaskController {
 
 	public void setDescription(String text) {
 		this.description.setText(text);
+	}
+
+	public void setStatus(String status) {
+		this.status.getSelectionModel().select(status);
 	}
 }

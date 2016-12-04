@@ -108,7 +108,7 @@ public class DB {
 					//get all subtasks of a task
 					Task t = new Task(res.getString("title"), new User(res.getString("assignee")), 
 						new Status(res.getString("status")), res.getDate("startDate"), res.getDate("dueDate"), 
-						res.getString("description"), rs.getInt("priority"));
+						res.getString("description"), res.getInt("priority"));
 						tasks.add(t);
 				}
 				task.setSubTasks(tasks);

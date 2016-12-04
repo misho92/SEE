@@ -89,6 +89,7 @@ class XCell extends ListCell<String> {
     		controller.setStartDate(result.get(5));
     		controller.setDueDate(result.get(6));
     		controller.setDescription(result.get(1));
+    		controller.setStatus(result.get(4));
     		controller.edit(task, result.get(0));
     	}
     	else{
@@ -101,6 +102,7 @@ class XCell extends ListCell<String> {
     		controller.setStartDate(result.get(5));
     		controller.setDueDate(result.get(6));
     		controller.setDescription(result.get(1));
+    		controller.setStatus(result.get(4));
     		controller.edit(listTasks.getSelectionModel().getSelectedItem().toString(), result.get(0));
     	}
         stage.setScene(scene);
