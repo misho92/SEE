@@ -247,7 +247,7 @@ public class DB {
 			}
 		}
 
-		public ArrayList<String> loadTask(String task, String item, String user, String title) {
+		public ArrayList<String> loadTask(String task, String item, String title) {
 			// TODO Auto-generated method stub
 			getConnection();
 			ArrayList<String> details = new ArrayList<String>();
@@ -257,10 +257,9 @@ public class DB {
 					st.setString(1, item);
 				}
 				else{
-					st = conn.prepareStatement("SELECT * FROM TASK WHERE mainTask = ? AND assignee = ? AND title = ?");
+					st = conn.prepareStatement("SELECT * FROM TASK WHERE mainTask = ? AND title = ?");
 					st.setString(1, item);
-					st.setString(2, user);
-					st.setString(3, title);
+					st.setString(2, title);
 				}
 				// avoid sql injection
 				

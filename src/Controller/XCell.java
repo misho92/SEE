@@ -82,9 +82,9 @@ class XCell extends ListCell<String> {
         Scene scene = new Scene(root, 500, 650);
     	if(task.equals("task")){
     		stage.setTitle("Edit Task");
-    		result = new DB().loadTask(task, lastItem, "", "");
+    		result = new DB().loadTask(task, lastItem, "");
     		controller.setTextTitleField(result.get(0));
-    		controller.setTextAssigneeField(result.get(2));
+    		controller.setAssignees(result.get(2));
     		controller.setPriority(result.get(8));
     		controller.setStartDate(result.get(5));
     		controller.setDueDate(result.get(6));
@@ -94,9 +94,9 @@ class XCell extends ListCell<String> {
     	else{
     		stage.setTitle("Edit subTask");
     		result = new DB().loadTask(task, listTasks.getSelectionModel().getSelectedItem().toString(), 
-    				user.getName(), listSubTasks.getSelectionModel().getSelectedItem());
+    				listSubTasks.getSelectionModel().getSelectedItem());
     		controller.setTextTitleField(result.get(0));
-    		controller.setTextAssigneeField(result.get(2));
+    		controller.setAssignees(result.get(2));
     		controller.setPriority(result.get(8));
     		controller.setStartDate(result.get(5));
     		controller.setDueDate(result.get(6));
@@ -118,7 +118,7 @@ class XCell extends ListCell<String> {
             lastItem = item;
             label.setText(item!=null ? item : "<null>");
             //only edit tasks assigned to you
-            if(!user.getName().equals(new DB().getAssigneeForTask(item))) {
+            if(!new DB().getAssigneeForTask(item).contains(user.getName())) {
         		edit.setDisable(true);
         	}
             //listView.getItems().remove(item);
