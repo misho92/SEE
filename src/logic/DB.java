@@ -449,4 +449,41 @@ public class DB {
 			}
 			return name;
 		}
+
+		public boolean canCloseTask(String task) {
+			getConnection();
+			boolean close = true;
+			try {
+				st = conn.prepareStatement("SELECT * FROM TASK WHERE mainTask = ?");
+				// avoid sql injection
+				st.setString(1, task);
+				rs = st.executeQuery();
+				while (rs.next()) {
+					if(!rs.getString("status").equals("done")) return close = false;
+				}
+				System.out.println("Query executed");
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+				displayErrorDB();
+			} finally {
+				// finally block used to close resources
+				try {
+					if (st != null)
+						st.close();
+				} catch (SQLException se2) {
+				}
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				}
+			}
+			return close;
+		}
 }
