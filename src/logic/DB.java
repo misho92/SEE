@@ -486,4 +486,77 @@ public class DB {
 			}
 			return close;
 		}
+
+		public boolean isRegistered(String email) {
+			getConnection();
+			boolean isRegistered = false;
+			try {
+				st = conn.prepareStatement("SELECT * FROM USER WHERE email = ?");
+				// avoid sql injection
+				st.setString(1, email);
+				rs = st.executeQuery();
+				while (rs.next()) {
+					isRegistered = true;
+				}
+				System.out.println("Query executed");
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+				displayErrorDB();
+			} finally {
+				// finally block used to close resources
+				try {
+					if (st != null)
+						st.close();
+				} catch (SQLException se2) {
+				}
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				}
+			}
+			return isRegistered;
+		}
+
+		public boolean register(String email, String displayName, String role) {
+			getConnection();
+			boolean result = false;
+			try {
+				//avoid sql injection
+				st = conn.prepareStatement("INSERT INTO USER VALUES(?,?,?)");
+				st.setString(1, email);
+				st.setString(2, displayName);
+				st.setString(3, role);
+				st.executeUpdate();
+				System.out.println("Query executed");
+				result = true;
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Query failed to execute");
+				displayErrorDB();
+			}
+			finally{
+			      //finally block used to close resources
+			      try{
+			         if(st!=null)
+			            st.close();
+			      }catch(SQLException se2){}
+			      try{
+			         if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){
+			         se.printStackTrace();
+			      }
+			}
+			return result;
+		}
 }

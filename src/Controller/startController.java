@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -40,13 +41,16 @@ public class StartController implements Initializable {
     private Button loginButton;
 
     @FXML
-    private Button newUserButton;
+    private Button register;
 
     @FXML
     private PasswordField passwordField;
 
     @FXML
     private TextField usernameField;
+    
+    @FXML
+    private ComboBox role;
 
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -79,33 +83,121 @@ public class StartController implements Initializable {
         						}
         						response = br.readLine();
         					}
-        					User user = new DB().loadUser(email);
-                			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
-                			//inject the conn into the loader at start up
-                			loader.setControllerFactory(new Callback<Class<?>, Object>() {
-                			    @Override
-                			    public Object call(Class<?> controllerClass) {
-                			        if (controllerClass == WelcomeController.class) {
-                			        	WelcomeController controller = new WelcomeController();
-                			            controller.initData(encoded, user);
-                			            return controller;
-                			        } else {
-                			            try {
-                			                return controllerClass.newInstance();
-                			            } catch (Exception e) {
-                			                throw new RuntimeException(e);
-                			            }
-                			        }
-                			    }
-                			});
-                			Parent root = (Parent) loader.load();
-                			WelcomeController controller = loader.<WelcomeController>getController();
-                			final Stage stage = new Stage();
-                			stage.setTitle("Dashboard");
-                			stage.setScene(new Scene(root,1500,800));
-                			stage.show();
-                			Stage closingStage = (Stage) loginButton.getScene().getWindow();
-                			closingStage.close();
+        					if(new DB().isRegistered(email)){
+        						User user = new DB().loadUser(email);
+                    			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
+                    			//inject the conn into the loader at start up
+                    			loader.setControllerFactory(new Callback<Class<?>, Object>() {
+                    			    @Override
+                    			    public Object call(Class<?> controllerClass) {
+                    			        if (controllerClass == WelcomeController.class) {
+                    			        	WelcomeController controller = new WelcomeController();
+                    			            controller.initData(encoded, user);
+                    			            return controller;
+                    			        } else {
+                    			            try {
+                    			                return controllerClass.newInstance();
+                    			            } catch (Exception e) {
+                    			                throw new RuntimeException(e);
+                    			            }
+                    			        }
+                    			    }
+                    			});
+                    			Parent root = (Parent) loader.load();
+                    			WelcomeController controller = loader.<WelcomeController>getController();
+                    			final Stage stage = new Stage();
+                    			stage.setTitle("Dashboard");
+                    			stage.setScene(new Scene(root,1500,800));
+                    			stage.show();
+                    			Stage closingStage = (Stage) loginButton.getScene().getWindow();
+                    			closingStage.close();	
+        					}
+        					else{
+        						Alert alert = new Alert(AlertType.ERROR);
+                            	alert.setTitle("Error Dialog");
+                            	alert.setHeaderText("You are not registered!");
+                            	alert.setContentText("Please register to the tool");
+                            	alert.showAndWait();
+        					}
+                		}catch(final IOException ex){
+                			ex.getStackTrace();
+                		}
+        			}
+        			else if(conn.getResponseCode() == 401){
+        				Alert alert = new Alert(AlertType.ERROR);
+                    	alert.setTitle("Error Dialog");
+                    	alert.setHeaderText("Incorrect credentials");
+                    	alert.setContentText("Incorrect credentials");
+                    	alert.showAndWait();
+        			}
+        			else{
+        				Alert alert = new Alert(AlertType.ERROR);
+                    	alert.setTitle("Error Dialog");
+                    	alert.setHeaderText("Error in the JIRA API");
+                    	alert.setContentText("Error code " + conn.getResponseCode());
+                    	alert.showAndWait();
+        			}
+        		}catch (MalformedURLException ex) {
+        				ex.printStackTrace();
+        			 } catch (IOException ex) {
+        				ex.printStackTrace();
+        			 }
+            }
+        });
+        register.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e)   {
+            	try {
+            		//authentication
+        			URL url = new URL("http://messir.uni.lu:8085/jira/rest/api/2/user?username=" + 
+        					usernameField.getText());
+        			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        			conn.setRequestMethod("GET");
+        			conn.setRequestProperty("Accept", "application/json");
+        			String auth = usernameField.getText() + ":" + passwordField.getText();
+        			byte[] credentials = auth.getBytes(StandardCharsets.UTF_8);
+        			String encoded = Base64.getEncoder().encodeToString(credentials);
+        			conn.setRequestProperty("Authorization", "Basic " + encoded);
+        			if(conn.getResponseCode() == 200){
+        				try{	
+        					BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+        					String response = br.readLine();
+        					String email = null;
+        					String displayName = null;
+        					while (response != null) {
+        						email = response.split("emailAddress")[1].substring(3).split("\"")[0];
+       							displayName = response.split("displayName")[1].substring(3).split("\"")[0];
+        						response = br.readLine();
+        					}
+        					System.out.println(email + "\n" + displayName + "\n" + role.getSelectionModel().getSelectedItem().toString());
+        					if(new DB().register(email,displayName,role.getSelectionModel().getSelectedItem().toString())){
+        						User user = new User(email,displayName,role.getSelectionModel().getSelectedItem().toString());
+                    			final FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Welcome.fxml"));
+                    			//inject the conn into the loader at start up
+                    			loader.setControllerFactory(new Callback<Class<?>, Object>() {
+                    			    @Override
+                    			    public Object call(Class<?> controllerClass) {
+                    			        if (controllerClass == WelcomeController.class) {
+                    			        	WelcomeController controller = new WelcomeController();
+                    			            controller.initData(encoded, user);
+                    			            return controller;
+                    			        } else {
+                    			            try {
+                    			                return controllerClass.newInstance();
+                    			            } catch (Exception e) {
+                    			                throw new RuntimeException(e);
+                    			            }
+                    			        }
+                    			    }
+                    			});
+                    			Parent root = (Parent) loader.load();
+                    			WelcomeController controller = loader.<WelcomeController>getController();
+                    			final Stage stage = new Stage();
+                    			stage.setTitle("Dashboard");
+                    			stage.setScene(new Scene(root,1500,800));
+                    			stage.show();
+                    			Stage closingStage = (Stage) loginButton.getScene().getWindow();
+                    			closingStage.close();	
+        					}
                 		}catch(final IOException ex){
                 			ex.getStackTrace();
                 		}

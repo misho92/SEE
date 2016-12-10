@@ -8,16 +8,26 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?scenebuilder-background-color 0x008effff?>
+<?import javafx.collections.*?>
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Controller.StartController">
   <children>
-    <Button fx:id="loginButton" cancelButton="false" contentDisplay="CENTER" defaultButton="true" layoutX="725.0" layoutY="263.0" mnemonicParsing="false" opacity="1.0" prefHeight="28.0" prefWidth="92.0" text="Login" underline="false">
+    <Button fx:id="loginButton" cancelButton="false" contentDisplay="CENTER" defaultButton="true" layoutX="725.0" layoutY="285" mnemonicParsing="false" opacity="1.0" prefHeight="28.0" prefWidth="92.0" text="Login" underline="false">
       <font>
         <Font size="14.0" fx:id="x1" />
       </font>
     </Button>
+    <Button fx:id="register" cancelButton="false" contentDisplay="CENTER" defaultButton="true" layoutX="725.0" layoutY="320" mnemonicParsing="false" opacity="1.0" prefHeight="28.0" prefWidth="92.0" text="Register" underline="false"/>
     <PasswordField fx:id="passwordField" layoutX="725" layoutY="206.0" prefHeight="23.000099999997474" prefWidth="118.0" promptText="Password" />
     <TextField fx:id="usernameField" layoutX="725" layoutY="166.0" prefHeight="23.0" prefWidth="118.0" promptText="Username" />
+    <ComboBox fx:id="role" layoutX="725" layoutY="246" value="developer">
+	    <items>
+	    	<FXCollections fx:factory="observableArrayList">
+	    		<String fx:id="developer" fx:value="developer" />
+	        	<String fx:id="manager" fx:value="manager" />
+	        </FXCollections>
+	    </items>
+	</ComboBox>
     <Label layoutX="600" layoutY="98.0" prefHeight="35.000099999997474" prefWidth="405.0" text="Tesma collaboration development tool">
       <font>
         <Font size="22.0" />
