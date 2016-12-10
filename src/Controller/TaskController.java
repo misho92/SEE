@@ -175,7 +175,6 @@ public class TaskController {
 			@Override
 			public void handle(ActionEvent event) {
 				if (checkValidity()) {
-					System.out.println(text);
 					if (task.equals("task")){
 						//cannot close a task if all the sub development tasks are not done
 						if(status.getSelectionModel().getSelectedItem().toString().equals("done")){
@@ -193,10 +192,12 @@ public class TaskController {
 					        	alert.showAndWait();
 							}
 						}
-						new DB().editTask(titleField.getText(), description.getText(), text, null,
-								status.getSelectionModel().getSelectedItem().toString(), 
-								java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
-								issue, priority.getSelectionModel().getSelectedItem().toString(), oldValue);
+						else{
+							new DB().editTask(titleField.getText(), description.getText(), text, null,
+									status.getSelectionModel().getSelectedItem().toString(), 
+									java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
+									issue, priority.getSelectionModel().getSelectedItem().toString(), oldValue);	
+						}
 					}
 					else
 						new DB().editTask(titleField.getText(), description.getText(), text, task,
@@ -227,7 +228,7 @@ public class TaskController {
 			alert.setHeaderText("Too many characters");
 			alert.setContentText("Please type maximum 20 characters for the title");
 			alert.showAndWait();
-		} else if (!titleField.getText().trim().isEmpty() && titleField.getText() != null && text != null 
+		} else if (!titleField.getText().trim().isEmpty() && titleField.getText() != null && text != null && !text.equals("")
 				&& end.getValue() != null) {
 			valid = true;
 		} else {
