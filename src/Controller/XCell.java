@@ -119,10 +119,13 @@ class XCell extends ListCell<String> {
         } else {
             lastItem = item;
             label.setText(item!=null ? item : "<null>");
-            //only edit tasks assigned to you
+            //only edit tasks assigned to you or you are a manager
             if(!new DB().getAssigneeForTask(item).contains(user.getName())) {
         		edit.setDisable(true);
         	}
+            if(user.getRole().getRole().equals("manager")){
+            	edit.setDisable(false);
+            }
             //listView.getItems().remove(item);
             /*
              * File image = new File("D:/Workspace/SEE/src/images/expand.png");

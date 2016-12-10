@@ -178,19 +178,25 @@ public class TaskController {
 					System.out.println(text);
 					if (task.equals("task")){
 						//cannot close a task if all the sub development tasks are not done
-						if(new DB().canCloseTask(oldValue)){
-							new DB().editTask(titleField.getText(), description.getText(), text, null,
-									status.getSelectionModel().getSelectedItem().toString(), 
-									java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
-									issue, priority.getSelectionModel().getSelectedItem().toString(), oldValue);
+						if(status.getSelectionModel().getSelectedItem().toString().equals("done")){
+							if(new DB().canCloseTask(oldValue)){
+								new DB().editTask(titleField.getText(), description.getText(), text, null,
+										status.getSelectionModel().getSelectedItem().toString(), 
+										java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
+										issue, priority.getSelectionModel().getSelectedItem().toString(), oldValue);
+							}
+							else{
+								Alert alert = new Alert(AlertType.ERROR);
+					        	alert.setTitle("Error Dialog");
+					        	alert.setHeaderText("Cannot close a task");
+					        	alert.setContentText("All sub development tasks must be done");
+					        	alert.showAndWait();
+							}
 						}
-						else{
-							Alert alert = new Alert(AlertType.ERROR);
-				        	alert.setTitle("Error Dialog");
-				        	alert.setHeaderText("Cannot close a task");
-				        	alert.setContentText("All sub development tasks must be done");
-				        	alert.showAndWait();
-						}
+						new DB().editTask(titleField.getText(), description.getText(), text, null,
+								status.getSelectionModel().getSelectedItem().toString(), 
+								java.sql.Date.valueOf(start.getValue()), java.sql.Date.valueOf(end.getValue()),
+								issue, priority.getSelectionModel().getSelectedItem().toString(), oldValue);
 					}
 					else
 						new DB().editTask(titleField.getText(), description.getText(), text, task,
